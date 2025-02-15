@@ -7,6 +7,7 @@ CONFIG += qt c++11
 QT += core gui widgets
 
 SOURCES += \
+    CAnt.cpp \
     GridWidget.cpp \
     main.cpp \
     subwindow.cpp

@@ -45,8 +45,6 @@ private:
     int m_score;
     bool m_cycledMap = false;
 
-    //bool m_fullRedraw = false;
-
     enum Turn { Left, Right };
 
 };

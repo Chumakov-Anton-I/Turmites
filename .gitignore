@@ -35,5 +35,6 @@
 Turmites.pro.user
 
 # Other
+bin/
 build/
 data/
