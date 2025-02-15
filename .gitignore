@@ -31,6 +31,9 @@
 *.out
 *.app
 
+# Qt Creator project
+Turmites.pro.user
+
 # Other
 build/
 data/
