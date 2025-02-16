@@ -2,14 +2,14 @@
 #define GRIDWIDGET_H
 
 #include <QWidget>
-#include <QVector>
+#include <QList>
 
 class QPainter;
 class QTimer;
 class SquareCell;
 class CAnt;
 
-typedef QVector<QVector<SquareCell *>> SquaredMap;
+typedef QList<QList<SquareCell *>> SquaredMap;
 
 class GridWidget : public QWidget
 {
