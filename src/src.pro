@@ -16,7 +16,6 @@ HEADERS += \
     CAnt.h \
     GridWidget.h \
     SquareCell.h \
-    matrix.h \
     subwindow.h
 
 msvc:{
