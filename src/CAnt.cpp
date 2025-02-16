@@ -14,11 +14,8 @@ bool CAnt::move()
 
     int X = x();
     int Y = y();
-    int turn;
-    if (m_map->at(X).at(Y)->color() == Qt::black)
-        turn = Left;
-    else // if (m_map.at(X).at(Y)->color() == Qt::white)
-        turn = Right;
+    Qt::GlobalColor color = m_map->at(X).at(Y)->color();
+    int turn = m_behavior.value(color);
 
     switch (m_dir) {
     case CAnt::North:

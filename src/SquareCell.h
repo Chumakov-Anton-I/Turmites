@@ -2,6 +2,7 @@
 #define SQUARECELL_H
 
 #include <QRect>
+//#include <QColor>
 
 class SquareCell
 {
