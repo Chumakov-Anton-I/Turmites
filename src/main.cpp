@@ -2,14 +2,13 @@
 
 #include <QApplication>
 
-//#include "MainWindow.h"
-#include "subwindow.h"
+#include "MainWindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    Subwindow window;
+    MainWindow window;
     window.setWindowTitle(QString("Langton's Ant"));
     window.show();
 

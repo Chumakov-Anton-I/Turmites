@@ -9,12 +9,15 @@ QT += core gui widgets
 SOURCES += \
     CAnt.cpp \
     GridWidget.cpp \
+    MainWindow.cpp \
     main.cpp \
     subwindow.cpp
 
 HEADERS += \
     CAnt.h \
     GridWidget.h \
+    InfoWindow.h \
+    MainWindow.h \
     SquareCell.h \
     subwindow.h
 
