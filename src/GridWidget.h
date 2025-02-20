@@ -5,6 +5,7 @@
 #include <QList>
 
 class QPainter;
+class QPixmap;
 class QTimer;
 class SquareCell;
 class CAnt;
@@ -28,7 +29,7 @@ public slots:
     void stop();
     void reset();
     void changeTimeout(int timeout);
-    void setCycled(bool on) { m_cycledMap = on; }
+    void setCycled(bool on);
 
 private:
     void initMap();
@@ -38,12 +39,13 @@ private:
     SquaredMap m_map;
     CAnt *m_ant;
     QPainter *m_painter;
+    QPixmap *m_pixmap;
     QTimer *m_timer;
     int m_mapSize;
     int m_cellSize = 4; //pix
     int m_timeout; // ms
     int m_score;
-    bool m_cycledMap = false;
+    //bool m_cycledMap = false;
 
     enum Turn { Left, Right };
 

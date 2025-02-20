@@ -3,6 +3,7 @@
 #include "CAnt.h"
 
 #include <QPainter>
+#include <QPixmap>
 #include <QTimer>
 
 GridWidget::GridWidget(int size, QWidget *parent)
@@ -50,6 +51,11 @@ void GridWidget::changeTimeout(int timeout)
         m_timer->start(m_timeout);
 }
 
+void GridWidget::setCycled(bool on)
+{
+    m_ant->setCycled(on);
+}
+
 void GridWidget::initMap()
 {
     /* Fill grid */
@@ -64,6 +70,8 @@ void GridWidget::initMap()
     /* Resize widget */
     resize(m_mapSize*m_cellSize, m_mapSize*m_cellSize);
     setMinimumSize(size());
+    m_pixmap = new QPixmap(size());
+
     m_score = 0;    // reset score
     emit scoreChanged(0);
 }
@@ -84,11 +92,15 @@ void GridWidget::paintEvent(QPaintEvent *)
 {
     updateMap();
 
-    m_painter->begin(this);
+    m_painter->begin(m_pixmap);
     for (auto r = m_map.constBegin(); r != m_map.constEnd(); ++r) {
         for (auto c = r->constBegin(); c != r->constEnd(); ++c)
             m_painter->fillRect((*c)->rect(), (*c)->color());
     }
     m_painter->fillRect(m_ant->rect(), m_ant->color());
+    m_painter->end();
+
+    m_painter->begin(this);
+    m_painter->drawPixmap(m_pixmap->rect(), *m_pixmap);
     m_painter->end();
 }
