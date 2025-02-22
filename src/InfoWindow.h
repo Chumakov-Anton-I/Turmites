@@ -7,7 +7,7 @@ class InfoWindow : public QWidget
 {
     Q_OBJECT
 public:
-    InfoWindow(QWidget *parent = nullptr) : QWidget(parent) {}
+    InfoWindow(QWidget *parent = nullptr);
 };
 
 #endif // INFOWINDOW_H

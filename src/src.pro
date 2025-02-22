@@ -9,6 +9,7 @@ QT += core gui widgets
 SOURCES += \
     CAnt.cpp \
     GridWidget.cpp \
+    InfoWindow.cpp \
     MainWindow.cpp \
     main.cpp \
     subwindow.cpp
