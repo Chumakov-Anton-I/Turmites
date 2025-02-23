@@ -6,7 +6,7 @@
 class GridWidget;
 class QPushButton;
 class QSpinBox;
-class QLabel;
+class QLineEdit;
 class QComboBox;
 class QCheckBox;
 
@@ -30,7 +30,7 @@ private:
     QPushButton *m_btnReset;
     QPushButton *m_btnSavePix;
 
-    QLabel *m_lblScore;
+    QLineEdit *m_lblScore;
     QSpinBox *m_sbTimeout;
     QComboBox *m_cbGridSize;
     QCheckBox *m_chbCycledMap;

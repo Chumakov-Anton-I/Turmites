@@ -5,7 +5,7 @@
 #include <QFormLayout>
 #include <QPushButton>
 #include <QSpinBox>
-#include <QLabel>
+#include <QLineEdit>
 #include <QComboBox>
 #include <QCheckBox>
 #include <QFileDialog>
@@ -41,8 +41,8 @@ Subwindow::Subwindow(QWidget *parent)
     paramsForm->setLabelAlignment(Qt::AlignRight);
     cmdLayout->addLayout(paramsForm);
 
-    m_lblScore = new QLabel("0");
-    m_lblScore->setFrameShape(QFrame::WinPanel);
+    m_lblScore = new QLineEdit("0");
+    m_lblScore->setReadOnly(true);
     paramsForm->addRow(tr("Steps:"), m_lblScore);
     m_sbTimeout = new QSpinBox;
     m_sbTimeout->setRange(1, 1000);
