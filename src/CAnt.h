@@ -1,3 +1,8 @@
+/**
+ * CAnt.h
+ * This class describes an ant and its behaviour
+ */
+
 #ifndef CANT_H
 #define CANT_H
 

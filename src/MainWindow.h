@@ -1,3 +1,8 @@
+/**
+ * MainWindow.h
+ * The MainWindow class describes the main window of the application.
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

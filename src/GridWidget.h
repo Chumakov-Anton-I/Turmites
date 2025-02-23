@@ -1,3 +1,8 @@
+/**
+ * GridWidget.h
+ * The GridWidget class which describes grid map
+ */
+
 #ifndef GRIDWIDGET_H
 #define GRIDWIDGET_H
 

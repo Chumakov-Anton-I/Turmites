@@ -1,3 +1,7 @@
+/**
+ * About widget
+ */
+
 #ifndef INFOWINDOW_H
 #define INFOWINDOW_H
 

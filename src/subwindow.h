@@ -1,3 +1,8 @@
+/**
+ * subwindow.h
+ * The Subvindow class describes the simplest Langton's ant.
+ */
+
 #ifndef SUBWINDOW_H
 #define SUBWINDOW_H
 
