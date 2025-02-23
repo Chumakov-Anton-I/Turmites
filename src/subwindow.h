@@ -19,18 +19,22 @@ public:
 private slots:
     void setScore(int score);
     void setGridSize();
+    void setStartDirection();
     void setCycled();
+    void savePicture();
 
 private:
     GridWidget *map;
     QPushButton *m_btnStart;
     QPushButton *m_btnStop;
     QPushButton *m_btnReset;
+    QPushButton *m_btnSavePix;
 
     QLabel *m_lblScore;
     QSpinBox *m_sbTimeout;
     QComboBox *m_cbGridSize;
     QCheckBox *m_chbCycledMap;
+    QComboBox *m_cbStartDirection;
 };
 
 #endif // SUBWINDOW_H

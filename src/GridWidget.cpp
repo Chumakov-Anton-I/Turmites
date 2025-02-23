@@ -1,5 +1,4 @@
 #include "GridWidget.h"
-#include "SquareCell.h"
 #include "CAnt.h"
 
 #include <QPainter>
@@ -7,13 +6,13 @@
 #include <QTimer>
 
 GridWidget::GridWidget(int size, QWidget *parent)
-    : QWidget(parent), m_mapSize(size), m_timeout(10)
+    : QWidget(parent), m_mapSize(size), m_timeout(10), m_startDir(CAnt::North)
 {
     initMap();
 
-    m_ant = new CAnt(m_cellSize);
+    m_ant = new CAnt(m_cellSize, Qt::red);
     m_ant->setMap(&m_map);
-    m_ant->reset(m_mapSize/2, m_mapSize/2, CAnt::North, Qt::red);
+    m_ant->reset(m_mapSize/2, m_mapSize/2, CAnt::North);
 
     m_painter = new QPainter;
     m_timer = new QTimer(this);
@@ -32,15 +31,40 @@ void GridWidget::setSize(int size)
     reset();
 }
 
-void GridWidget::start() { m_timer->start(m_timeout); }
+void GridWidget::setStartDirection(int dir)
+{
+    m_startDir = dir;
+    reset();
+}
 
-void GridWidget::stop() { m_timer->stop(); }
+void GridWidget::setAntBehaviour(const QString &behaviour)
+{
+    Q_UNUSED(behaviour)
+    //m_ant->setBehaviour(behaviour);
+}
+
+bool GridWidget::savePicture(const QString &filenName) const
+{
+    if (m_pixmap != nullptr)
+        return m_pixmap->save(filenName);
+    return false;
+}
+
+void GridWidget::start()
+{
+    m_timer->start(m_timeout);
+}
+
+void GridWidget::stop()
+{
+    m_timer->stop();
+}
 
 void GridWidget::reset()
 {
     m_timer->stop();
     initMap();
-    m_ant->reset(m_mapSize/2, m_mapSize/2, CAnt::North, Qt::red);
+    m_ant->reset(m_mapSize/2, m_mapSize/2, CAnt::Direction(m_startDir));
     update();
 }
 
@@ -78,10 +102,8 @@ void GridWidget::initMap()
 
 void GridWidget::updateMap()
 {
-    if (!m_timer->isActive())
-        return; // do nothing when the timer is stopped
-    if (!m_ant->move()) {
-        m_timer->stop();
+    if (!m_timer->isActive() || !m_ant->move()) {
+        m_timer->stop();    // stop the timer after ant's death
         return;
     }
     m_score++;

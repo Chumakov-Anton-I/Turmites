@@ -2,15 +2,13 @@
 #define GRIDWIDGET_H
 
 #include <QWidget>
-#include <QList>
+
+#include "SquareCell.h"
 
 class QPainter;
 class QPixmap;
 class QTimer;
-class SquareCell;
 class CAnt;
-
-typedef QList<QList<SquareCell *>> SquaredMap;
 
 class GridWidget : public QWidget
 {
@@ -20,6 +18,9 @@ public:
     ~GridWidget();
 
     void setSize(int size);
+    void setStartDirection(int dir);
+    void setAntBehaviour(const QString &behaviour);
+    bool savePicture(const QString &filenName) const;
 
 signals:
     void scoreChanged(int score);
@@ -45,7 +46,7 @@ private:
     int m_cellSize = 4; //pix
     int m_timeout; // ms
     int m_score;
-    //bool m_cycledMap = false;
+    int m_startDir;
 
     enum Turn { Left, Right };
 

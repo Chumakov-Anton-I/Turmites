@@ -3,36 +3,31 @@
 
 #include "SquareCell.h"
 
-#include <QList>
 #include <QHash>
-
-typedef QList<QList<SquareCell *>> SquaredMap;
+#include <QColor>
 
 class CAnt : public SquareCell
 {
 public:
     enum Direction {North, East, South, West};
     enum Turn { Left, Right };
-    explicit CAnt(int size, Qt::GlobalColor color = Qt::red)
-        : SquareCell(0, 0, size, color) {
-        m_behavior.insert(Qt::black, Left);
-        m_behavior.insert(Qt::white, Right);
-    }
+    explicit CAnt(int size, QColor color = Qt::red, Direction dir = North);
 
-    void reset(int x, int y, Direction dir = North, Qt::GlobalColor color = Qt::red);
+    void reset(int x, int y, Direction dir = North);
     void setMap(SquaredMap *map) { m_map = map; }
     void setCycled(bool on) { m_cycled = on; }
-    void setBehavior(const QHash<Qt::GlobalColor, Turn> &behavior) { m_behavior = behavior; }
 
     bool move();
 
 private:
-    QHash<Qt::GlobalColor, Turn> m_behavior;
+    SquaredMap *m_map;
+    QHash<QString, int> m_behaviour;    // key = "#RRGGBB", value = Turn::value
 
     Direction m_dir;
     bool m_alive = true;
     bool m_cycled = false;
-    SquaredMap *m_map;
+    QColor m_defColor;
+    int m_mapSize;
 };
 
 #endif // CANT_H

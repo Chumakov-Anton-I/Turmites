@@ -1,11 +1,19 @@
 #include "CAnt.h"
 
-void CAnt::reset(int x, int y, Direction dir, Qt::GlobalColor color)
+CAnt::CAnt(int size, QColor color, Direction dir)
+    : SquareCell(0, 0, size, color), m_dir(dir), m_defColor(color)
+{
+    m_behaviour.insert(QColorConstants::Svg::black.name(), Left);
+    m_behaviour.insert(QColorConstants::Svg::white.name(), Right);
+}
+
+void CAnt::reset(int x, int y, Direction dir)
 {
     setPos(x, y);
+    m_mapSize = m_map->size();
     m_dir = dir;
     m_alive = true;
-    setColor(color);
+    setColor(m_defColor);
 }
 
 bool CAnt::move()
@@ -14,11 +22,12 @@ bool CAnt::move()
 
     int X = x();
     int Y = y();
-    Qt::GlobalColor color = m_map->at(X).at(Y)->color();
-    int turn = m_behavior.value(color);
+    QColor color = m_map->at(X).at(Y)->color();
+    int turn = m_behaviour.value(color.name());
 
     switch (m_dir) {
     case CAnt::North:
+
         if (turn == Left) {
             m_map->at(X).at(Y)->setColor(Qt::white);
             m_dir = CAnt::West;
@@ -30,6 +39,7 @@ bool CAnt::move()
         }
         break;
     case CAnt::East:
+
         if (turn == Left) {
             m_map->at(X).at(Y)->setColor(Qt::white);
             m_dir = CAnt::North;
@@ -41,6 +51,7 @@ bool CAnt::move()
         }
         break;
     case CAnt::South:
+
         if (turn == Left) {
             m_map->at(X).at(Y)->setColor(Qt::white);
             m_dir = CAnt::East;
@@ -52,6 +63,7 @@ bool CAnt::move()
         }
         break;
     case CAnt::West:
+
         if (turn == Left) {
             m_map->at(X).at(Y)->setColor(Qt::white);
             m_dir = CAnt::South;
@@ -61,10 +73,9 @@ bool CAnt::move()
             m_dir = CAnt::North;
             Y -= 1;
         }
-        break;
     }
 
-    if (X < 0 || Y < 0 || X >= m_map->size() || Y >= m_map->size())
+    if (X < 0 || Y < 0 || X >= m_mapSize || Y >= m_mapSize)
     {
         if (m_cycled) {
             if (X < 0)  X = m_map->size() - 1;
