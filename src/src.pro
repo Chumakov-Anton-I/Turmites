@@ -11,8 +11,8 @@ SOURCES += \
     GridWidget.cpp \
     InfoWindow.cpp \
     MainWindow.cpp \
-    main.cpp \
-    subwindow.cpp
+    subwindow.cpp \
+    main.cpp
 
 HEADERS += \
     CAnt.h \

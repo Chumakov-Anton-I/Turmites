@@ -16,7 +16,7 @@ GridWidget::GridWidget(int size, QWidget *parent)
     initMap();
 
     m_ant = new CAnt(Qt::red);
-    m_ant->setMap(&m_map);
+    m_ant->setMap(this);
     m_ant->reset(m_mapSize/2, m_mapSize/2, CAnt::North);
 
     m_painter = new QPainter;
@@ -92,7 +92,7 @@ void GridWidget::initMap()
     for (int i = 0; i < m_mapSize; ++i) {
         QVector<SquareCell *> row;
         for (int j = 0; j < m_mapSize; ++j)
-            row.push_back(new SquareCell(i, j));
+            row.push_back(new SquareCell(i, j, Qt::white));
         m_map.push_back(row);
     }
 

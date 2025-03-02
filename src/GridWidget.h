@@ -27,6 +27,9 @@ public:
     void setAntBehaviour(const QString &behaviour);
     bool savePicture(const QString &filenName) const;
 
+    int mapSize() const { return m_mapSize; }
+    SquareCell* cell(int i, int j) { return m_map[i][j]; }
+
 signals:
     void scoreChanged(int score);
 
