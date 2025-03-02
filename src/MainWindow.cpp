@@ -14,6 +14,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
 {
+    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
     QVBoxLayout *topLayout = new QVBoxLayout;
     m_tabWidget = new QTabWidget;
     m_tabWidget->addTab(new Subwindow, tr("Simplest"));
