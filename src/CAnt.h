@@ -16,7 +16,7 @@ class CAnt : public SquareCell
 public:
     enum Direction {North, East, South, West};
     enum Turn { Left, Right };
-    explicit CAnt(int size, QColor color = Qt::red, Direction dir = North);
+    explicit CAnt(QColor color = Qt::red, Direction dir = North);
 
     void reset(int x, int y, Direction dir = North);
     void setMap(SquaredMap *map) { m_map = map; }
@@ -31,7 +31,7 @@ private:
     Direction m_dir;
     bool m_alive = true;
     bool m_cycled = false;
-    QColor m_defColor;
+    QColor m_defColor;  ///< Default color
     int m_mapSize;
 };
 

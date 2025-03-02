@@ -42,18 +42,20 @@ private:
     void updateMap();
     void paintEvent(QPaintEvent *event);
 
+    QRect getRect(const QPoint &pos);
+
     SquaredMap m_map;
     CAnt *m_ant;
     QPainter *m_painter;
     QPixmap *m_pixmap;
     QTimer *m_timer;
-    int m_mapSize;
-    int m_cellSize = 4; //pix
+    int m_mapSize;      //! Current size of the map
+    int m_cellSize = 4; //! [pix] Size of cells
     int m_timeout; // ms
-    int m_score;
+    int m_score;        //! Current score
     int m_startDir;
 
-    enum Turn { Left, Right };
+    //enum Turn { Left, Right };
 
 };
 

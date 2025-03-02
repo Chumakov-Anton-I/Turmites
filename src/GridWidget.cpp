@@ -15,7 +15,7 @@ GridWidget::GridWidget(int size, QWidget *parent)
 {
     initMap();
 
-    m_ant = new CAnt(m_cellSize, Qt::red);
+    m_ant = new CAnt(Qt::red);
     m_ant->setMap(&m_map);
     m_ant->reset(m_mapSize/2, m_mapSize/2, CAnt::North);
 
@@ -92,7 +92,7 @@ void GridWidget::initMap()
     for (int i = 0; i < m_mapSize; ++i) {
         QVector<SquareCell *> row;
         for (int j = 0; j < m_mapSize; ++j)
-            row.push_back(new SquareCell(i, j, m_cellSize));
+            row.push_back(new SquareCell(i, j));
         m_map.push_back(row);
     }
 
@@ -122,12 +122,17 @@ void GridWidget::paintEvent(QPaintEvent *)
     m_painter->begin(m_pixmap);
     for (auto r = m_map.constBegin(); r != m_map.constEnd(); ++r) {
         for (auto c = r->constBegin(); c != r->constEnd(); ++c)
-            m_painter->fillRect((*c)->rect(), (*c)->color());
+            m_painter->fillRect(getRect((*c)->pos()), (*c)->color());
     }
-    m_painter->fillRect(m_ant->rect(), m_ant->color());
+    m_painter->fillRect(getRect(m_ant->pos()), m_ant->color());
     m_painter->end();
 
     m_painter->begin(this);
     m_painter->drawPixmap(m_pixmap->rect(), *m_pixmap);
     m_painter->end();
+}
+
+QRect GridWidget::getRect(const QPoint &pos)
+{
+    return QRect(pos*m_cellSize, QSize(m_cellSize, m_cellSize));
 }

@@ -5,8 +5,8 @@
 
 #include "CAnt.h"
 
-CAnt::CAnt(int size, QColor color, Direction dir)
-    : SquareCell(0, 0, size, color), m_dir(dir), m_defColor(color)
+CAnt::CAnt(QColor color, Direction dir)
+    : SquareCell(0, 0, color), m_dir(dir), m_defColor(color)
 {
     m_behaviour.insert(QColorConstants::Svg::black.name(), Left);
     m_behaviour.insert(QColorConstants::Svg::white.name(), Right);
