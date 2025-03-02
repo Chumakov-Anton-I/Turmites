@@ -1,3 +1,8 @@
+/*
+ * CAnt.cpp
+ * CAnt class implementation
+ */
+
 #include "CAnt.h"
 
 CAnt::CAnt(int size, QColor color, Direction dir)
@@ -27,7 +32,6 @@ bool CAnt::move()
 
     switch (m_dir) {
     case CAnt::North:
-
         if (turn == Left) {
             m_map->at(X).at(Y)->setColor(Qt::white);
             m_dir = CAnt::West;
@@ -39,7 +43,6 @@ bool CAnt::move()
         }
         break;
     case CAnt::East:
-
         if (turn == Left) {
             m_map->at(X).at(Y)->setColor(Qt::white);
             m_dir = CAnt::North;
@@ -51,7 +54,6 @@ bool CAnt::move()
         }
         break;
     case CAnt::South:
-
         if (turn == Left) {
             m_map->at(X).at(Y)->setColor(Qt::white);
             m_dir = CAnt::East;
@@ -63,7 +65,6 @@ bool CAnt::move()
         }
         break;
     case CAnt::West:
-
         if (turn == Left) {
             m_map->at(X).at(Y)->setColor(Qt::white);
             m_dir = CAnt::South;

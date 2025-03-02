@@ -1,3 +1,8 @@
+/*
+ * MainWindow.cpp
+ * MainWindow class implementation
+ */
+
 #include "MainWindow.h"
 #include "subwindow.h"
 //#include "MulticolorMap.h"

@@ -1,3 +1,8 @@
+/*
+ * GridWidget.cpp
+ * GridWidget class implementation
+ */
+
 #include "GridWidget.h"
 #include "CAnt.h"
 
