@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 
     MainWindow window;
     window.setWindowTitle(QString("Langton's Ant"));
+    window.setWindowIcon(QIcon(":/ico_app.png"));
     window.show();
 
     return app.exec();
