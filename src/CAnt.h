@@ -9,10 +9,11 @@
 #include "SquareCell.h"
 #include "GridWidget.h"
 
-#include <QHash>
+//#include <QHash>
 #include <QColor>
 
 class GridWidget;
+class Engine;
 
 class CAnt : public SquareCell
 {
@@ -29,13 +30,15 @@ public:
 
 private:
     GridWidget *m_map;
-    QHash<QString, int> m_behaviour;    // key = "#RRGGBB", value = Turn::value
+    //QHash<QString, int> m_behaviour;    // key = "#RRGGBB", value = Turn::value
+    Engine *engine;
 
-    Direction m_dir;
+    int m_dir;
     bool m_alive = true;
     bool m_cycled = false;
-    QColor m_defColor;  ///< Default color
+    QColor m_defColor;  // Default color
     int m_mapSize;
+
 };
 
 #endif // CANT_H

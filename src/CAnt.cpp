@@ -1,15 +1,14 @@
-/*
- * CAnt.cpp
+/* CAnt.cpp
  * CAnt class implementation
  */
 
 #include "CAnt.h"
+#include "engine.h"
 
 CAnt::CAnt(QColor color, Direction dir)
     : SquareCell(0, 0, color), m_dir(dir), m_defColor(color)
 {
-    m_behaviour.insert(QColorConstants::Svg::black.name(), Left);
-    m_behaviour.insert(QColorConstants::Svg::white.name(), Right);
+    engine = new Engine;
 }
 
 void CAnt::reset(int x, int y, Direction dir)
@@ -25,64 +24,34 @@ bool CAnt::move()
 {
     if (!m_alive) return false; // do nothing if the ant isn't alive
 
-    int X = x();
-    int Y = y();
-    QColor color = m_map->cell(X, Y)->color();
-    int turn = m_behaviour.value(color.name());
+    int ax = x();
+    int ay = y();
+    QColor color = m_map->cell(ax, ay)->color();
+    engine->move(color, m_dir);
+    m_map->cell(ax, ay)->setColor(engine->color());
+    m_dir = engine->direction();
 
     switch (m_dir) {
     case CAnt::North:
-        if (turn == Left) {
-            m_map->cell(X, Y)->setColor(Qt::white);
-            m_dir = CAnt::West;
-            X -= 1;
-        } else /*if (turn == Right)*/ {
-            m_map->cell(X, Y)->setColor(Qt::black);
-            m_dir = CAnt::East;
-            X += 1;
-        }
+        --ay;
         break;
     case CAnt::East:
-        if (turn == Left) {
-            m_map->cell(X, Y)->setColor(Qt::white);
-            m_dir = CAnt::North;
-            Y -= 1;
-        } else /*if (turn == Right)*/ {
-            m_map->cell(X, Y)->setColor(Qt::black);
-            m_dir = CAnt::South;
-            Y += 1;
-        }
+        ++ax;
         break;
     case CAnt::South:
-        if (turn == Left) {
-            m_map->cell(X, Y)->setColor(Qt::white);
-            m_dir = CAnt::East;
-            X += 1;
-        } else /*if (turn == Right)*/ {
-            m_map->cell(X, Y)->setColor(Qt::black);
-            m_dir = CAnt::West;
-            X -= 1;
-        }
+        ++ay;
         break;
     case CAnt::West:
-        if (turn == Left) {
-            m_map->cell(X, Y)->setColor(Qt::white);
-            m_dir = CAnt::South;
-            Y += 1;
-        } else /*if (turn == Right)*/ {
-            m_map->cell(X, Y)->setColor(Qt::black);
-            m_dir = CAnt::North;
-            Y -= 1;
-        }
+        --ax;
     }
 
-    if (X < 0 || Y < 0 || X >= m_mapSize || Y >= m_mapSize)
+    if (ax < 0 || ay < 0 || ax >= m_mapSize || ay >= m_mapSize)
     {
         if (m_cycled) {
-            if (X < 0)  X = m_mapSize - 1;
-            if (Y < 0)  Y = m_mapSize - 1;
-            if (X == m_mapSize)  X = 0;
-            if (Y == m_mapSize)  Y = 0;
+            if (ax < 0)  ax = m_mapSize - 1;
+            if (ay < 0)  ay = m_mapSize - 1;
+            if (ax == m_mapSize)  ax = 0;
+            if (ay == m_mapSize)  ay = 0;
         } else {
             m_alive = false;
             setColor(Qt::gray);
@@ -90,6 +59,6 @@ bool CAnt::move()
         }
     }
 
-    setPos(X, Y);
+    setPos(ax, ay);
     return true;
 }

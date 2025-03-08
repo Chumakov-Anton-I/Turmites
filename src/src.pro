@@ -11,6 +11,7 @@ SOURCES += \
     GridWidget.cpp \
     InfoWindow.cpp \
     MainWindow.cpp \
+    engine.cpp \
     subwindow.cpp \
     main.cpp
 
@@ -20,6 +21,7 @@ HEADERS += \
     InfoWindow.h \
     MainWindow.h \
     SquareCell.h \
+    engine.h \
     subwindow.h
 
 msvc:{

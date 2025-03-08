@@ -58,8 +58,6 @@ private:
     int m_score;        //! Current score
     int m_startDir;
 
-    //enum Turn { Left, Right };
-
 };
 
 #endif // GRIDWIDGET_H
