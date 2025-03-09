@@ -14,17 +14,17 @@ class QPainter;
 class QPixmap;
 class QTimer;
 class CAnt;
+class Engine;
 
 class GridWidget : public QWidget
 {
     Q_OBJECT
 public:
-    GridWidget(int size = 50, QWidget *parent = nullptr);
+    GridWidget(Engine *engine, int size = 50, QWidget *parent = nullptr);
     ~GridWidget();
 
     void setSize(int size);
     void setStartDirection(int dir);
-    void setAntBehaviour(const QString &behaviour);
     bool savePicture(const QString &filenName) const;
 
     int mapSize() const { return m_mapSize; }

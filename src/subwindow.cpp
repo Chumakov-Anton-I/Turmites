@@ -1,5 +1,6 @@
 #include "subwindow.h"
 #include "GridWidget.h"
+#include "engine.h"
 
 #include <QBoxLayout>
 #include <QFormLayout>
@@ -14,6 +15,8 @@
 Subwindow::Subwindow(QWidget *parent)
     : QWidget(parent)
 {
+    m_engine = new Engine;
+
     setBackgroundRole(QPalette::Window);
     setAutoFillBackground(true);
 
@@ -41,19 +44,27 @@ Subwindow::Subwindow(QWidget *parent)
     paramsForm->setLabelAlignment(Qt::AlignRight);
     cmdLayout->addLayout(paramsForm);
 
+    // score counter
     m_lblScore = new QLineEdit("0");
     m_lblScore->setReadOnly(true);
     paramsForm->addRow(tr("Steps:"), m_lblScore);
+    // set timeout
     m_sbTimeout = new QSpinBox;
     m_sbTimeout->setRange(1, 1000);
     m_sbTimeout->setValue(5);
     m_sbTimeout->setSingleStep(5);
     m_sbTimeout->setSuffix(tr(" ms"));
     paramsForm->addRow(tr("Timeout:"), m_sbTimeout);
+    // set behaviour
+    m_cbBehaviour = new QComboBox;
+    paramsForm->addRow(tr("Behaviour:"), m_cbBehaviour);
+    // set start orient
     m_cbStartDirection = new QComboBox;
-    paramsForm->addRow(tr("Initial direction:"), m_cbStartDirection);
+    paramsForm->addRow(tr("Start orientation:"), m_cbStartDirection);
+    // grid size
     m_cbGridSize = new QComboBox;
     paramsForm->addRow(tr("Grid size:"), m_cbGridSize);
+    // is the map cycled?
     m_chbCycledMap = new QCheckBox(tr("Cycled map"));
     paramsForm->addRow(m_chbCycledMap);
 
@@ -61,10 +72,11 @@ Subwindow::Subwindow(QWidget *parent)
     m_btnSavePix = new QPushButton(tr("Save picture..."));
     cmdLayout->addWidget(m_btnSavePix);
 
-    map = new GridWidget(100);
+    map = new GridWidget(m_engine, 100);
     topLayout->addWidget(map);
 
     // tune widgets
+    m_cbBehaviour->addItems(m_engine->predefList());
     m_cbGridSize->addItems(QStringList() << "100" << "150" << "200" << "250");
     m_cbStartDirection->addItems(QStringList() << "North" << "East" << "South" << "West");
 
@@ -77,6 +89,7 @@ Subwindow::Subwindow(QWidget *parent)
     connect(m_cbGridSize, &QComboBox::currentTextChanged, this, &Subwindow::setGridSize);
     connect(m_chbCycledMap, &QCheckBox::checkStateChanged, this, &Subwindow::setCycled);
     connect(m_btnSavePix, &QPushButton::clicked, this, &Subwindow::savePicture);
+    connect(m_cbBehaviour, &QComboBox::currentTextChanged, this, &Subwindow::setBehaviour);
 }
 
 void Subwindow::setScore(int score)
@@ -89,6 +102,7 @@ void Subwindow::setGridSize()
     int size = m_cbGridSize->currentText().toInt();
     if (size == 0) size = 100;
     map->setSize(size);
+    resize(minimumSizeHint());
 }
 
 void Subwindow::setStartDirection()
@@ -106,13 +120,25 @@ void Subwindow::setCycled()
 
 void Subwindow::savePicture()
 {
+    map->stop();
+    QString selectedFormat;
     QString fname = QFileDialog::getSaveFileName(
         this,
         tr("Save picture"),
         QString(),
-        tr("Images (*.bmp *.png *.xpm *.jpg)"));
+        tr("BMP format (*.bmp);;JPEG format (*.jpg);;PNG format (*.png);;All images (*.bmp *.png *.xpm *.jpg)"),
+        &selectedFormat);
     if (fname.isEmpty()) return;
     if (!map->savePicture(fname))
         QMessageBox::critical(this, tr("Error"),
                               tr("Cannot save file"));  // TODO
+    map->start();
+}
+
+void Subwindow::setBehaviour()
+{
+    map->stop();
+    map->reset();
+    QString beh = m_cbBehaviour->currentText();
+    m_engine->setBehaviour(beh);
 }

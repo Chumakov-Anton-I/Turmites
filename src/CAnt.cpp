@@ -5,10 +5,10 @@
 #include "CAnt.h"
 #include "engine.h"
 
-CAnt::CAnt(QColor color, Direction dir)
-    : SquareCell(0, 0, color), m_dir(dir), m_defColor(color)
+CAnt::CAnt(Engine *engine, QColor color, Direction dir)
+    : SquareCell(0, 0, color), m_engine(engine), m_dir(dir), m_defColor(color)
 {
-    engine = new Engine;
+    //engine = new Engine;
 }
 
 void CAnt::reset(int x, int y, Direction dir)
@@ -27,21 +27,21 @@ bool CAnt::move()
     int ax = x();
     int ay = y();
     QColor color = m_map->cell(ax, ay)->color();
-    engine->move(color, m_dir);
-    m_map->cell(ax, ay)->setColor(engine->color());
-    m_dir = engine->direction();
+    m_engine->move(color, m_dir);
+    m_map->cell(ax, ay)->setColor(m_engine->color());
+    m_dir = m_engine->direction();
 
     switch (m_dir) {
-    case CAnt::North:
+    case North:
         --ay;
         break;
-    case CAnt::East:
+    case East:
         ++ax;
         break;
-    case CAnt::South:
+    case South:
         ++ay;
         break;
-    case CAnt::West:
+    case West:
         --ax;
     }
 

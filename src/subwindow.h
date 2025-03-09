@@ -14,6 +14,7 @@ class QSpinBox;
 class QLineEdit;
 class QComboBox;
 class QCheckBox;
+class Engine;
 
 class Subwindow : public QWidget
 {
@@ -27,9 +28,11 @@ private slots:
     void setStartDirection();
     void setCycled();
     void savePicture();
+    void setBehaviour();
 
 private:
     GridWidget *map;
+    Engine *m_engine;
     QPushButton *m_btnStart;
     QPushButton *m_btnStop;
     QPushButton *m_btnReset;
@@ -40,6 +43,7 @@ private:
     QComboBox *m_cbGridSize;
     QCheckBox *m_chbCycledMap;
     QComboBox *m_cbStartDirection;
+    QComboBox *m_cbBehaviour;
 };
 
 #endif // SUBWINDOW_H

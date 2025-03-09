@@ -5,17 +5,18 @@
 
 #include "GridWidget.h"
 #include "CAnt.h"
+#include "engine.h"
 
 #include <QPainter>
 #include <QPixmap>
 #include <QTimer>
 
-GridWidget::GridWidget(int size, QWidget *parent)
+GridWidget::GridWidget(Engine *engine, int size, QWidget *parent)
     : QWidget(parent), m_mapSize(size), m_timeout(10), m_startDir(CAnt::North)
 {
     initMap();
 
-    m_ant = new CAnt(Qt::red);
+    m_ant = new CAnt(engine, Qt::red);
     m_ant->setMap(this);
     m_ant->reset(m_mapSize/2, m_mapSize/2, CAnt::North);
 
@@ -40,12 +41,6 @@ void GridWidget::setStartDirection(int dir)
 {
     m_startDir = dir;
     reset();
-}
-
-void GridWidget::setAntBehaviour(const QString &behaviour)
-{
-    Q_UNUSED(behaviour)
-    //m_ant->setBehaviour(behaviour);
 }
 
 bool GridWidget::savePicture(const QString &filenName) const
@@ -100,6 +95,7 @@ void GridWidget::initMap()
     resize(m_mapSize*m_cellSize, m_mapSize*m_cellSize);
     setMinimumSize(size());
     m_pixmap = new QPixmap(size());
+    m_pixmap->fill(Qt::white);
 
     m_score = 0;    // reset score
     emit scoreChanged(0);

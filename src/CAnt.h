@@ -1,6 +1,5 @@
-/**
- * CAnt.h
- * This class describes an ant and its behaviour
+/** CAnt.h
+ *  This class describes an ant and its behaviour
  */
 
 #ifndef CANT_H
@@ -9,7 +8,6 @@
 #include "SquareCell.h"
 #include "GridWidget.h"
 
-//#include <QHash>
 #include <QColor>
 
 class GridWidget;
@@ -19,8 +17,7 @@ class CAnt : public SquareCell
 {
 public:
     enum Direction {North, East, South, West};
-    enum Turn { Left, Right };
-    explicit CAnt(QColor color = Qt::red, Direction dir = North);
+    explicit CAnt(Engine *engine, QColor color = Qt::red, Direction dir = North);
 
     void reset(int x, int y, Direction dir = North);
     void setMap(GridWidget *map) { m_map = map; }
@@ -30,8 +27,7 @@ public:
 
 private:
     GridWidget *m_map;
-    //QHash<QString, int> m_behaviour;    // key = "#RRGGBB", value = Turn::value
-    Engine *engine;
+    Engine *m_engine;
 
     int m_dir;
     bool m_alive = true;

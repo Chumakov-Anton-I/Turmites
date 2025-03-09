@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     MainWindow window;
-    window.setWindowTitle(QString("Langton's Ant"));
+    window.setWindowTitle(QString("Turmite"));
     window.setWindowIcon(QIcon(":/ico_app.png"));
     window.show();
 

@@ -5,8 +5,6 @@
 #include <QHash>
 #include <QColor>
 
-class QColor;
-
 typedef QHash<QString, QString> TColorTable;
 typedef QHash<QString, int> TRulesTable;
 
@@ -19,14 +17,18 @@ public:
     ~Engine() {}
 
     void setBehaviour(const QString &behaviour);
-    void setBehaviour(const QStringList &behaviour);
+    //void setBehaviour(const QStringList &behaviour);
 
     void move(const QColor &color, int dir);
 
     QColor color() const { return QColor(out_newColor); }
     int direction() const { return out_newDir; }
 
+    QStringList predefList() const { return m_defModels; }  // not very good
+
 private:
+    QStringList m_defModels;
+
     QString m_strBehaviour;         // e.g. "RRLL"
     QStringList m_listBehaviour; // list: "#RRGGBB:dir", ...
     TColorTable m_colorTable;
@@ -34,6 +36,9 @@ private:
 
     QString out_newColor;
     int out_newDir;
+    QList<QColor> m_colors;
+
+    QColor m_background;    // default color
 };
 
 #endif // ENGINE_H
