@@ -68,11 +68,10 @@ void Engine::setBehaviour(const QString &behaviour)
     //
 }*/
 
-void Engine::move(const QColor &color, int dir)
+void Engine::move(QColor &color, int &dir)
 {
     // bullshit
     QString s_color = color.name();
-    QString s_newColor = m_colorTable.value(s_color);
     int turn = m_rulesTable.value(s_color);
     switch (turn) {
     case Left:
@@ -88,6 +87,5 @@ void Engine::move(const QColor &color, int dir)
     default:    // Front <-> No turn
         break;
     }
-    out_newColor = s_newColor;
-    out_newDir = dir;
+    color = QColor::fromString(m_colorTable.value(s_color));
 }

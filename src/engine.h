@@ -19,7 +19,7 @@ public:
     void setBehaviour(const QString &behaviour);
     //void setBehaviour(const QStringList &behaviour);
 
-    void move(const QColor &color, int dir);
+    void move(QColor &color, int &dir);
 
     QColor color() const { return QColor(out_newColor); }
     int direction() const { return out_newDir; }

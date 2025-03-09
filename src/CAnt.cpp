@@ -28,8 +28,7 @@ bool CAnt::move()
     int ay = y();
     QColor color = m_map->cell(ax, ay)->color();
     m_engine->move(color, m_dir);
-    m_map->cell(ax, ay)->setColor(m_engine->color());
-    m_dir = m_engine->direction();
+    m_map->cell(ax, ay)->setColor(color);
 
     switch (m_dir) {
     case North:
