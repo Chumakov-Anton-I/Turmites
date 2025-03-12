@@ -1,10 +1,9 @@
-/**
- * subwindow.h
+/** turmitewgt.h
  * The Subvindow class describes the simplest Langton's ant.
  */
 
-#ifndef SUBWINDOW_H
-#define SUBWINDOW_H
+#ifndef TURMITEWGT_H
+#define TURMITEWGT_H
 
 #include <QWidget>
 
@@ -14,13 +13,13 @@ class QSpinBox;
 class QLineEdit;
 class QComboBox;
 class QCheckBox;
-class Engine;
+class Turmite;
 
-class Subwindow : public QWidget
+class TurmiteWgt : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Subwindow(QWidget *parent = nullptr);
+    explicit TurmiteWgt(QWidget *parent = nullptr);
 
 private slots:
     void setScore(int score);
@@ -28,24 +27,22 @@ private slots:
     void setStartDirection();
     void setCycled();
     void savePicture();
-    void saveScreenshot();
-    void setBehaviour();
+    //void setBehaviour();
 
 private:
     GridWidget *map;
-    Engine *m_engine;
+    Turmite *m_engine;
     QPushButton *m_btnStart;
     QPushButton *m_btnStop;
     QPushButton *m_btnReset;
     QPushButton *m_btnSavePix;
-    QPushButton *m_btnSaveScreen;
 
     QLineEdit *m_lblScore;
     QSpinBox *m_sbTimeout;
     QComboBox *m_cbGridSize;
     QCheckBox *m_chbCycledMap;
     QComboBox *m_cbStartDirection;
-    QComboBox *m_cbBehaviour;
+    //QComboBox *m_cbBehaviour;
 };
 
-#endif // SUBWINDOW_H
+#endif // TURMITEWGT_H

@@ -13,7 +13,8 @@ SOURCES += \
     MainWindow.cpp \
     engine.cpp \
     subwindow.cpp \
-    main.cpp
+    main.cpp \
+    turmitewgt.cpp
 
 HEADERS += \
     CAnt.h \
@@ -22,7 +23,8 @@ HEADERS += \
     MainWindow.h \
     SquareCell.h \
     engine.h \
-    subwindow.h
+    subwindow.h \
+    turmitewgt.h
 
 msvc:{
     QMAKE_CXXFLAGS_RELEASE += /O2

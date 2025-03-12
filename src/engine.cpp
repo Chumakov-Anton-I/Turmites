@@ -1,17 +1,24 @@
 #include "engine.h"
 
-#include <QDebug>
-
 Engine::Engine()
 {
-    m_defModels << "RL" << "RLR" << "RLLR" << "RRLR" << "LLRR" << "RRRLR" << "RRRLRRLRRR"
+    m_defModels << "RL" << "RLR" << "RLLR" << "RRLR" << "LLRR" << "RRLL" << "RRRLR" << "RRRLRRLRRR"
                 << "RRLRLLRRRRLL" << "RRLLLRRLRL" << "RRLLLRLLLRLL" << "RRLLLRLLLLL";// << "Custom";
     m_background = Qt::white;
-    /* Make default behaviour - Langton's Ant */
-    m_colorTable.insert("#000000", "#ffffff");  // black => white
-    m_colorTable.insert("#ffffff", "#000000");  // white => black
-    m_rulesTable.insert("#000000", Left);  // black <=> left turn
-    m_rulesTable.insert("#ffffff", Right);  // white <=> right turn
+    //Turn: Left = 0, Front = 1, Right = 2, Uturn =3
+    //QStringList b;
+    /*b << "0|#ffffff:#000000:1:1" << "0|#ffffff:#ffffff:0:0"
+      << "1|#ffffff:#000000:2:1" << "1|#000000:#ffffff:1:0";*/
+    /*QString color0 = QColorConstants::Svg::white.name();
+    QString color1 = QColorConstants::Svg::blueviolet.name();
+    QString color2 = QColorConstants::Svg::crimson.name();
+    QString color3 = QColorConstants::Svg::orangered.name();
+    // RRLL
+    b << QString("0|%1:%2:%3:0").arg(color0, color1).arg(Right)
+      << QString("0|%1:%2:%3:0").arg(color1, color2).arg(Right)
+      << QString("0|%1:%2:%3:0").arg(color2, color3).arg(Left)
+      << QString("0|%1:%2:%3:0").arg(color3, color0).arg(Left);
+    setBehaviour(b);*/
     // color list, see https://www.w3.org/TR/SVG11/types.html#ColorKeywords
     using namespace QColorConstants::Svg;
     m_colors << m_background << blueviolet << crimson << orangered << limegreen << green << tomato
@@ -30,19 +37,22 @@ Engine::Engine()
              << powderblue << purple << rosybrown << sandybrown << seagreen << sienna << skyblue
              << slateblue << springgreen << steelblue << thistle << blue << turquoise << violet
              << wheat << yellow << yellowgreen << goldenrod;
+    // init defaul model - Langton's ant
+    setBehaviour("RL");
 }
 
 void Engine::setBehaviour(const QString &behaviour)
 {
-    m_strBehaviour = behaviour;
-    m_colorTable.clear();
-    m_rulesTable.clear();
-    // fill rules
-    auto ci = m_colors.constBegin();
-    QString color0 = ci->name();    // memorize start color
-    QString color2;
+    if (behaviour == "RL") {    // default model is Langton's ant
+        setBehaviour(QStringList() << "0|#000000:#ffffff:0:0" << "0|#ffffff:#000000:2:0");
+        return;
+    }
+    QList<QColor> subList = m_colors.sliced(0, behaviour.size());    // copy sublist of colors
+    subList.push_back(QColor(Qt::white));   // add 1st color to cycle enumerating
+    auto ci = subList.constBegin();
     int ddir;
-    for (auto c = m_strBehaviour.constBegin(); c != m_strBehaviour.constEnd(); ++c) {
+    QStringList list;
+    for (auto c = behaviour.constBegin(); c != behaviour.constEnd(); ++c) {
         if (*c == QChar('L'))
             ddir = Left;
         else if (*c == QChar('F'))
@@ -53,39 +63,39 @@ void Engine::setBehaviour(const QString &behaviour)
             ddir = Uturn;
         else    // this case is impossible, but...
             ddir = Front;
-        color2 = ci->name();    // get current key
-        m_rulesTable.insert(color2, ddir);
-        m_colorTable.insert(color2, (++ci)->name());
+        list << QString("0|%1:%2:%3:0").arg(ci->name(), (++ci)->name()).arg(ddir);
     }
-    m_colorTable.insert(color2, color0);  // last key-color references to 0st key
+    setBehaviour(list);
 }
 
-/*void Engine::setBehaviour(const QStringList &behaviour)
+void Engine::setBehaviour(const QStringList &behaviour)
 {
-    m_listBehaviour = behaviour;
-    m_colorTable.clear();
-    m_rulesTable.clear();
-    //
-}*/
+    m_stateTable.clear();
+    m_cState = 0;   // init state
+    for (auto bi = behaviour.constBegin(); bi != behaviour.constEnd(); ++bi) {
+        QStringList item = (*bi).split(":");
+        m_stateTable.insert(item[0], TState{item[1], item[2].toInt(), item[3].toUInt()});
+    }
+}
 
-void Engine::move(QColor &color, int &dir)
+void Engine::move(QColor &color, int &direction)
 {
-    // bullshit
-    QString s_color = color.name();
-    int turn = m_rulesTable.value(s_color);
+    QString key = QString("%1|%2").arg(m_cState).arg(color.name());
+    TState state = m_stateTable.value(key);
+    int turn = state.direction;
     switch (turn) {
     case Left:
-        if (--dir < North) dir = West;
+        if (--direction < North) direction = West;
         break;
     case Right:
-        if (++dir > West) dir = North;
+        if (++direction > West) direction = North;
         break;
     case Uturn:
-        if (++dir > West) dir = North;
-        if (++dir > West) dir = North;
-        break;
-    default:    // Front <-> No turn
+        if (++direction > West) direction = North;
+        if (++direction > West) direction = North;
+    default:    // no turn
         break;
     }
-    color = QColor::fromString(m_colorTable.value(s_color));
+    color = QColor(state.nColorStr);    // update color
+    m_cState = state.nState;    // update state
 }

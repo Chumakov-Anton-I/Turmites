@@ -5,39 +5,33 @@
 #include <QHash>
 #include <QColor>
 
-typedef QHash<QString, QString> TColorTable;
-typedef QHash<QString, int> TRulesTable;
+struct TState
+{
+    QString nColorStr;  // new color
+    int direction;      // turn
+    unsigned nState;    // new state
+};
 
 class Engine
 {
 public:
     enum Direction { North, East, South, West };
     enum Turn { Left, Front, Right, Uturn };
-    explicit Engine();
-    ~Engine() {}
+
+    Engine();
+    //~Engine() {}
 
     void setBehaviour(const QString &behaviour);
-    //void setBehaviour(const QStringList &behaviour);
-
-    void move(QColor &color, int &dir);
-
-    QColor color() const { return QColor(out_newColor); }
-    int direction() const { return out_newDir; }
+    void setBehaviour(const QStringList &behaviour);
+    void move(QColor &color, int &direction);
 
     QStringList predefList() const { return m_defModels; }  // not very good
 
-private:
+protected:
     QStringList m_defModels;
-
-    QString m_strBehaviour;         // e.g. "RRLL"
-    QStringList m_listBehaviour; // list: "#RRGGBB:dir", ...
-    TColorTable m_colorTable;
-    TRulesTable m_rulesTable;
-
-    QString out_newColor;
-    int out_newDir;
     QList<QColor> m_colors;
-
+    QHash<QString, TState> m_stateTable;
+    unsigned m_cState;  // current state
     QColor m_background;    // default color
 };
 

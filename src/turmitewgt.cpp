@@ -1,6 +1,6 @@
-#include "subwindow.h"
+#include "turmitewgt.h"
 #include "GridWidget.h"
-#include "engine.h"
+#include "turmite.h"
 
 #include <QBoxLayout>
 #include <QFormLayout>
@@ -11,12 +11,11 @@
 #include <QCheckBox>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QRect>
 
-Subwindow::Subwindow(QWidget *parent)
+TurmiteWgt::TurmiteWgt(QWidget *parent)
     : QWidget(parent)
 {
-    m_engine = new Engine;
+    m_engine = new Turmite;
 
     setBackgroundRole(QPalette::Window);
     setAutoFillBackground(true);
@@ -57,8 +56,8 @@ Subwindow::Subwindow(QWidget *parent)
     m_sbTimeout->setSuffix(tr(" ms"));
     paramsForm->addRow(tr("Timeout:"), m_sbTimeout);
     // set behaviour
-    m_cbBehaviour = new QComboBox;
-    paramsForm->addRow(tr("Behaviour:"), m_cbBehaviour);
+    //m_cbBehaviour = new QComboBox;
+    //paramsForm->addRow(tr("Behaviour:"), m_cbBehaviour);
     // set start orient
     m_cbStartDirection = new QComboBox;
     paramsForm->addRow(tr("Start orientation:"), m_cbStartDirection);
@@ -72,36 +71,33 @@ Subwindow::Subwindow(QWidget *parent)
     cmdLayout->addStretch(1);
     m_btnSavePix = new QPushButton(tr("Save picture..."));
     cmdLayout->addWidget(m_btnSavePix);
-    m_btnSaveScreen = new QPushButton(tr("Save screenshot..."));
-    cmdLayout->addWidget(m_btnSaveScreen);
 
     map = new GridWidget(m_engine, 100);
     topLayout->addWidget(map);
 
     // tune widgets
-    m_cbBehaviour->addItems(m_engine->predefList());
-    m_cbGridSize->addItems(QStringList() << "100" << "125" << "150" << "200" << "250");
+    //m_cbBehaviour->addItems(m_engine->predefList());
+    m_cbGridSize->addItems(QStringList() << "100" << "150" << "200" << "250");
     m_cbStartDirection->addItems(QStringList() << "North" << "East" << "South" << "West");
 
     connect(m_btnStart, &QPushButton::clicked, map, &GridWidget::start);
     connect(m_btnStop, &QPushButton::clicked, map, &GridWidget::stop);
     connect(m_btnReset, &QPushButton::clicked, map, &GridWidget::reset);
     connect(m_sbTimeout, &QSpinBox::valueChanged, map, &GridWidget::changeTimeout);
-    connect(map, &GridWidget::scoreChanged, this, &Subwindow::setScore);
-    connect(m_cbStartDirection, &QComboBox::currentIndexChanged, this, &Subwindow::setStartDirection);
-    connect(m_cbGridSize, &QComboBox::currentTextChanged, this, &Subwindow::setGridSize);
-    connect(m_chbCycledMap, &QCheckBox::checkStateChanged, this, &Subwindow::setCycled);
-    connect(m_btnSavePix, &QPushButton::clicked, this, &Subwindow::savePicture);
-    connect(m_cbBehaviour, &QComboBox::currentTextChanged, this, &Subwindow::setBehaviour);
-    connect(m_btnSaveScreen, &QPushButton::clicked, this, &Subwindow::saveScreenshot);
+    connect(map, &GridWidget::scoreChanged, this, &TurmiteWgt::setScore);
+    connect(m_cbStartDirection, &QComboBox::currentIndexChanged, this, &TurmiteWgt::setStartDirection);
+    connect(m_cbGridSize, &QComboBox::currentTextChanged, this, &TurmiteWgt::setGridSize);
+    connect(m_chbCycledMap, &QCheckBox::checkStateChanged, this, &TurmiteWgt::setCycled);
+    connect(m_btnSavePix, &QPushButton::clicked, this, &TurmiteWgt::savePicture);
+    //connect(m_cbBehaviour, &QComboBox::currentTextChanged, this, &TurmiteWgt::setBehaviour);
 }
 
-void Subwindow::setScore(int score)
+void TurmiteWgt::setScore(int score)
 {
     m_lblScore->setText(QString::number(score));
 }
 
-void Subwindow::setGridSize()
+void TurmiteWgt::setGridSize()
 {
     int size = m_cbGridSize->currentText().toInt();
     if (size == 0) size = 100;
@@ -109,12 +105,12 @@ void Subwindow::setGridSize()
     resize(minimumSizeHint());
 }
 
-void Subwindow::setStartDirection()
+void TurmiteWgt::setStartDirection()
 {
     map->setStartDirection(m_cbStartDirection->currentIndex());
 }
 
-void Subwindow::setCycled()
+void TurmiteWgt::setCycled()
 {
     if (m_chbCycledMap->checkState() == Qt::Unchecked)
         map->setCycled(false);
@@ -122,7 +118,7 @@ void Subwindow::setCycled()
         map->setCycled(true);
 }
 
-void Subwindow::savePicture()
+void TurmiteWgt::savePicture()
 {
     map->stop();
     QString selectedFormat;
@@ -139,24 +135,10 @@ void Subwindow::savePicture()
     map->start();
 }
 
-void Subwindow::saveScreenshot()
-{
-    map->stop();
-    QString fname = QFileDialog::getSaveFileName(
-        this,
-        tr("Save screenshot"),
-        QString(),
-        tr("BMP format (*.bmp);;JPEG format (*.jpg);;PNG format (*.png);;All images (*.bmp *.png *.xpm *.jpg)"));
-    if (fname.isEmpty()) return;
-    QPixmap pix = this->grab(QRect(QPoint(0,0), size()));
-    if (!pix.save(fname))
-        QMessageBox::critical(this, tr("Error"), tr("Cannot save file"));   // TODO
-}
-
-void Subwindow::setBehaviour()
+/*void TurmiteWgt::setBehaviour()
 {
     map->stop();
     map->reset();
     QString beh = m_cbBehaviour->currentText();
     m_engine->setBehaviour(beh);
-}
+}*/
