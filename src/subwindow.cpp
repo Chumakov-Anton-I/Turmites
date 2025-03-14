@@ -80,7 +80,7 @@ Subwindow::Subwindow(QWidget *parent)
 
     // tune widgets
     m_cbBehaviour->addItems(m_engine->predefList());
-    m_cbGridSize->addItems(QStringList() << "100" << "125" << "150" << "200" << "250");
+    m_cbGridSize->addItems(QStringList() << "75" << "100" << "125" << "150" << "200" << "250");
     m_cbStartDirection->addItems(QStringList() << "North" << "East" << "South" << "West");
 
     connect(m_btnStart, &QPushButton::clicked, map, &GridWidget::start);

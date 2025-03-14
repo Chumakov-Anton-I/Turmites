@@ -18,6 +18,7 @@ void CAnt::reset(int x, int y, Direction dir)
     m_dir = dir;
     m_alive = true;
     setColor(m_defColor);
+    m_engine->reset();
 }
 
 bool CAnt::move()

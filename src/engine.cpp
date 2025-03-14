@@ -2,24 +2,40 @@
 
 Engine::Engine()
 {
-    m_defModels << "RL" << "RLR" << "RLLR" << "RRLR" << "LLRR" << "RRLL" << "RRRLR" << "RRRLRRLRRR"
-                << "RRLRLLRRRRLL" << "RRLLLRRLRL" << "RRLLLRLLLRLL" << "RRLLLRLLLLL";// << "Custom";
+    m_defModels << "RL" << "RLR" << "RLLR" << "RRLR" << "LLRR" << "RRLL" << "RRRLR" << "LRRRRRLLR"
+                << "RRRLRRLRRR" << "RRLLLRRLRL" << "RRLLLRLLLLL" << "RRLRLLRRRRLL" << "RRLLLRLLLRLL"
+                << "LLRRRLRLRLLR" << "RRLLLRLLLRRR";// << "Custom";
     m_background = Qt::white;
-    //Turn: Left = 0, Front = 1, Right = 2, Uturn =3
-    //QStringList b;
-    /*b << "0|#ffffff:#000000:1:1" << "0|#ffffff:#ffffff:0:0"
-      << "1|#ffffff:#000000:2:1" << "1|#000000:#ffffff:1:0";*/
-    /*QString color0 = QColorConstants::Svg::white.name();
-    QString color1 = QColorConstants::Svg::blueviolet.name();
-    QString color2 = QColorConstants::Svg::crimson.name();
-    QString color3 = QColorConstants::Svg::orangered.name();
-    // RRLL
-    b << QString("0|%1:%2:%3:0").arg(color0, color1).arg(Right)
-      << QString("0|%1:%2:%3:0").arg(color1, color2).arg(Right)
-      << QString("0|%1:%2:%3:0").arg(color2, color3).arg(Left)
-      << QString("0|%1:%2:%3:0").arg(color3, color0).arg(Left);
-    setBehaviour(b);*/
-    // color list, see https://www.w3.org/TR/SVG11/types.html#ColorKeywords
+    //Turn: Left = 0, Front = 1, Right = 2, Uturn = 3
+    QString c0 = QColor(Qt::black).name();
+    QString c1 = QColor(Qt::white).name();
+    m_predefTurmites.insert("Langton's ant", QStringList()
+            << "0|#000000:#ffffff:0:0" << "0|#ffffff:#000000:2:0");
+    m_predefTurmites.insert("Demo", QStringList()
+        << QString("0|#000000:#ffffff:2:0") << QString("0|#ffffff:#ffffff:2:1")
+        << QString("1|#000000:#000000:1:0") << QString("1|#ffffff:#000000:1:1"));
+    m_predefTurmites.insert("Spiral", QStringList()
+        << QString("0|%1:%2:%3:1").arg(c0, c1).arg(Front) << QString("0|%1:%2:%3:0").arg(c1, c1).arg(Left)
+        << QString("1|%1:%2:%3:1").arg(c0, c1).arg(Right) << QString("1|%1:%2:%3:0").arg(c0, c1).arg(Front));
+    m_predefTurmites.insert("Highway", QStringList()
+        << "0|#000000:#ffffff:2:1" << "0|#ffffff:#000000:2:1"
+        << "1|#000000:#ffffff:1:0" << "1|#ffffff:#ffffff:1:1");
+    m_predefTurmites.insert("Wormtrail", QStringList()
+        << "0|#000000:#ffffff:2:1" << "0|#ffffff:#ffffff:0:1"
+        << "1|#000000:#ffffff:2:1" << "1|#ffffff:#000000:2:0");
+    m_predefTurmites.insert("Picasso", QStringList()
+        << "0|#000000:#ffffff:0:0" << "0|#ffffff:#ffffff:2:1"
+        << "1|#000000:#000000:2:0" << "1|#ffffff:#000000:0:1");
+    m_predefTurmites.insert("Fibonacci", QStringList()
+        << QString("0|%1:%2:%3:1").arg(c0, c1).arg(Left)  << QString("0|%1:%2:%3:1").arg(c1, c1).arg(Left)
+        << QString("1|%1:%2:%3:1").arg(c0, c1).arg(Right) << QString("1|%1:%2:%3:0").arg(c1, c0).arg(Front));
+    m_predefTurmites.insert("Diamond", QStringList()
+        << "0|#000000:#000000:1:1" << "0|#ffffff:#000000:2:1"
+        << "1|#000000:#ffffff:0:0" << "1|#ffffff:#000000:1:1");
+    m_predefTurmites.insert("Snowflake", QStringList()
+        << "0|#000000:#ffffff:0:1" << "0|#ffffff:#ffffff:2:0"
+        << "1|#000000:#ffffff:3:1" << "1|#ffffff:#ffffff:3:2"
+        << "2|#000000:#000000:0:0" << "2|#ffffff:#000000:3:0");
     using namespace QColorConstants::Svg;
     m_colors << m_background << blueviolet << crimson << orangered << limegreen << green << tomato
              << teal << burlywood << cadetblue << chartreuse << coral << cornflowerblue << darkblue
@@ -37,8 +53,7 @@ Engine::Engine()
              << powderblue << purple << rosybrown << sandybrown << seagreen << sienna << skyblue
              << slateblue << springgreen << steelblue << thistle << blue << turquoise << violet
              << wheat << yellow << yellowgreen << goldenrod;
-    // init defaul model - Langton's ant
-    setBehaviour("RL");
+    setBehaviour("RL"); // init defaul model - Langton's ant
 }
 
 void Engine::setBehaviour(const QString &behaviour)
@@ -70,20 +85,24 @@ void Engine::setBehaviour(const QString &behaviour)
 
 void Engine::setBehaviour(const QStringList &behaviour)
 {
+    reset();
     m_stateTable.clear();
-    m_cState = 0;   // init state
     for (auto bi = behaviour.constBegin(); bi != behaviour.constEnd(); ++bi) {
         QStringList item = (*bi).split(":");
         m_stateTable.insert(item[0], TState{item[1], item[2].toInt(), item[3].toUInt()});
     }
 }
 
+void Engine::setBehaviourByName(const QString &name)
+{
+    setBehaviour(m_predefTurmites.value(name));
+}
+
 void Engine::move(QColor &color, int &direction)
 {
     QString key = QString("%1|%2").arg(m_cState).arg(color.name());
     TState state = m_stateTable.value(key);
-    int turn = state.direction;
-    switch (turn) {
+    switch (state.direction) {
     case Left:
         if (--direction < North) direction = West;
         break;
@@ -98,4 +117,9 @@ void Engine::move(QColor &color, int &direction)
     }
     color = QColor(state.nColorStr);    // update color
     m_cState = state.nState;    // update state
+}
+
+void Engine::reset()
+{
+    m_cState = 0;
 }

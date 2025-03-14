@@ -13,7 +13,7 @@ class QSpinBox;
 class QLineEdit;
 class QComboBox;
 class QCheckBox;
-class Turmite;
+class Engine;
 
 class TurmiteWgt : public QWidget
 {
@@ -27,11 +27,11 @@ private slots:
     void setStartDirection();
     void setCycled();
     void savePicture();
-    //void setBehaviour();
+    void setBehaviour();
 
 private:
     GridWidget *map;
-    Turmite *m_engine;
+    Engine *m_engine;
     QPushButton *m_btnStart;
     QPushButton *m_btnStop;
     QPushButton *m_btnReset;
@@ -42,7 +42,7 @@ private:
     QComboBox *m_cbGridSize;
     QCheckBox *m_chbCycledMap;
     QComboBox *m_cbStartDirection;
-    //QComboBox *m_cbBehaviour;
+    QComboBox *m_cbBehaviour;
 };
 
 #endif // TURMITEWGT_H

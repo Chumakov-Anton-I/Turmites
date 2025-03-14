@@ -1,6 +1,6 @@
 #include "turmitewgt.h"
 #include "GridWidget.h"
-#include "turmite.h"
+#include "engine.h"
 
 #include <QBoxLayout>
 #include <QFormLayout>
@@ -15,7 +15,7 @@
 TurmiteWgt::TurmiteWgt(QWidget *parent)
     : QWidget(parent)
 {
-    m_engine = new Turmite;
+    m_engine = new Engine;
 
     setBackgroundRole(QPalette::Window);
     setAutoFillBackground(true);
@@ -56,8 +56,8 @@ TurmiteWgt::TurmiteWgt(QWidget *parent)
     m_sbTimeout->setSuffix(tr(" ms"));
     paramsForm->addRow(tr("Timeout:"), m_sbTimeout);
     // set behaviour
-    //m_cbBehaviour = new QComboBox;
-    //paramsForm->addRow(tr("Behaviour:"), m_cbBehaviour);
+    m_cbBehaviour = new QComboBox;
+    paramsForm->addRow(tr("Behaviour:"), m_cbBehaviour);
     // set start orient
     m_cbStartDirection = new QComboBox;
     paramsForm->addRow(tr("Start orientation:"), m_cbStartDirection);
@@ -76,7 +76,7 @@ TurmiteWgt::TurmiteWgt(QWidget *parent)
     topLayout->addWidget(map);
 
     // tune widgets
-    //m_cbBehaviour->addItems(m_engine->predefList());
+    m_cbBehaviour->addItems(m_engine->predefListT());
     m_cbGridSize->addItems(QStringList() << "100" << "150" << "200" << "250");
     m_cbStartDirection->addItems(QStringList() << "North" << "East" << "South" << "West");
 
@@ -89,7 +89,7 @@ TurmiteWgt::TurmiteWgt(QWidget *parent)
     connect(m_cbGridSize, &QComboBox::currentTextChanged, this, &TurmiteWgt::setGridSize);
     connect(m_chbCycledMap, &QCheckBox::checkStateChanged, this, &TurmiteWgt::setCycled);
     connect(m_btnSavePix, &QPushButton::clicked, this, &TurmiteWgt::savePicture);
-    //connect(m_cbBehaviour, &QComboBox::currentTextChanged, this, &TurmiteWgt::setBehaviour);
+    connect(m_cbBehaviour, &QComboBox::currentTextChanged, this, &TurmiteWgt::setBehaviour);
 }
 
 void TurmiteWgt::setScore(int score)
@@ -135,10 +135,10 @@ void TurmiteWgt::savePicture()
     map->start();
 }
 
-/*void TurmiteWgt::setBehaviour()
+void TurmiteWgt::setBehaviour()
 {
     map->stop();
     map->reset();
     QString beh = m_cbBehaviour->currentText();
-    m_engine->setBehaviour(beh);
-}*/
+    m_engine->setBehaviourByName(beh);
+}
