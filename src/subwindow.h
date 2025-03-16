@@ -42,6 +42,7 @@ private:
 
     QLineEdit *m_lblScore;
     QSpinBox *m_sbTimeout;
+    QSpinBox *m_sbStepsToUpd;
     QComboBox *m_cbGridSize;
     QCheckBox *m_chbCycledMap;
     QComboBox *m_cbStartDirection;

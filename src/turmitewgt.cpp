@@ -77,7 +77,7 @@ TurmiteWgt::TurmiteWgt(QWidget *parent)
 
     // tune widgets
     m_cbBehaviour->addItems(m_engine->predefListT());
-    m_cbGridSize->addItems(QStringList() << "100" << "150" << "200" << "250");
+    m_cbGridSize->addItems(QStringList() << "100" << "125" << "150" << "200" << "250");
     m_cbStartDirection->addItems(QStringList() << "North" << "East" << "South" << "West");
 
     connect(m_btnStart, &QPushButton::clicked, map, &GridWidget::start);

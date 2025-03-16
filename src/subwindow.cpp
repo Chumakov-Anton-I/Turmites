@@ -56,6 +56,10 @@ Subwindow::Subwindow(QWidget *parent)
     m_sbTimeout->setSingleStep(5);
     m_sbTimeout->setSuffix(tr(" ms"));
     paramsForm->addRow(tr("Timeout:"), m_sbTimeout);
+    m_sbStepsToUpd = new QSpinBox;
+    m_sbStepsToUpd->setRange(1, 50);
+    m_sbStepsToUpd->setValue(1);
+    paramsForm->addRow(tr("Steps to update:"), m_sbStepsToUpd);
     // set behaviour
     m_cbBehaviour = new QComboBox;
     paramsForm->addRow(tr("Behaviour:"), m_cbBehaviour);
@@ -87,6 +91,7 @@ Subwindow::Subwindow(QWidget *parent)
     connect(m_btnStop, &QPushButton::clicked, map, &GridWidget::stop);
     connect(m_btnReset, &QPushButton::clicked, map, &GridWidget::reset);
     connect(m_sbTimeout, &QSpinBox::valueChanged, map, &GridWidget::changeTimeout);
+    connect(m_sbStepsToUpd, &QSpinBox::valueChanged, map, &GridWidget::setStepsToUpdate);
     connect(map, &GridWidget::scoreChanged, this, &Subwindow::setScore);
     connect(m_cbStartDirection, &QComboBox::currentIndexChanged, this, &Subwindow::setStartDirection);
     connect(m_cbGridSize, &QComboBox::currentTextChanged, this, &Subwindow::setGridSize);

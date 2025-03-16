@@ -25,6 +25,7 @@ public:
 
     void setSize(int size);
     void setStartDirection(int dir);
+    void setStepsToUpdate(int steps) { m_stepsToUpdate = steps; }
     bool savePicture(const QString &filenName) const;
 
     int mapSize() const { return m_mapSize; }
@@ -57,7 +58,7 @@ private:
     int m_timeout; // ms
     int m_score;        //! Current score
     int m_startDir;
-
+    int m_stepsToUpdate = 1;
 };
 
 #endif // GRIDWIDGET_H

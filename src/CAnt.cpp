@@ -9,6 +9,12 @@ CAnt::CAnt(Engine *engine, QColor color, Direction dir)
     : SquareCell(0, 0, color), m_engine(engine), m_dir(dir), m_defColor(color)
 {
     //engine = new Engine;
+    m_changedCell = new SquareCell(0, 0);
+}
+
+CAnt::~CAnt()
+{
+    delete m_changedCell;
 }
 
 void CAnt::reset(int x, int y, Direction dir)
@@ -19,6 +25,8 @@ void CAnt::reset(int x, int y, Direction dir)
     m_alive = true;
     setColor(m_defColor);
     m_engine->reset();
+    m_changedCell->setPos(0, 0);
+    m_changedCell->setColor(Qt::white);
 }
 
 bool CAnt::move()
@@ -30,6 +38,9 @@ bool CAnt::move()
     QColor color = m_map->cell(ax, ay)->color();
     m_engine->move(color, m_dir);
     m_map->cell(ax, ay)->setColor(color);
+    // update chenged cell
+    m_changedCell->setPos(ax, ay);
+    m_changedCell->setColor(color);
 
     switch (m_dir) {
     case North:
