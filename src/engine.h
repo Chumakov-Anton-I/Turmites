@@ -8,7 +8,9 @@
 
 class QPushButton;
 class QTabWidget;
-class TabAnt;
+class QListWidget;
+class QListWidgetItem;
+//class TabAnt;
 
 struct TState
 {
@@ -32,17 +34,22 @@ public:
 
     void move(QColor &color, int &direction);
     void reset() { m_cState = 0; }
-    void accept();
+
+public slots:
+    void loadAnt(QListWidgetItem *item);
+    void loadTurmite(QListWidgetItem *item);
 
 private:
     void initModels();
 
     QTabWidget *m_tabs;
-    TabAnt *m_tabAnt;
-    //TabTurmite *m_tabTurmite;
+    QPushButton *m_btnAddItem;
+    QPushButton *m_btnEditItem;
+    QListWidget *m_listAnts;
+    QListWidget *m_listTurmites;
 
-    QPushButton *m_btnAddState;
-    QPushButton *m_btnAddColor;
+    //TabAnt *m_tabAnt;
+    //TabTurmite *m_tabTurmite;
 
     QList<QColor> m_colors;
     QHash<QString, TState> m_stateTable;    // table of states of transfers
