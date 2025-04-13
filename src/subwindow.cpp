@@ -1,6 +1,7 @@
 #include "subwindow.h"
 #include "GridWidget.h"
 #include "engine.h"
+#include "InfoWindow.h"
 
 #include <QBoxLayout>
 #include <QFormLayout>
@@ -57,12 +58,14 @@ Subwindow::Subwindow(QWidget *parent)
     m_sbTimeout->setSuffix(tr(" ms"));
     paramsForm->addRow(tr("Timeout:"), m_sbTimeout);
     m_sbStepsToUpd = new QSpinBox;
-    m_sbStepsToUpd->setRange(1, 50);
+    m_sbStepsToUpd->setRange(1, 500);
     m_sbStepsToUpd->setValue(1);
     paramsForm->addRow(tr("Steps to update:"), m_sbStepsToUpd);
     // set behaviour
-    m_cbBehaviour = new QComboBox;
-    paramsForm->addRow(tr("Behaviour:"), m_cbBehaviour);
+    //m_cbBehaviour = new QComboBox;
+    //paramsForm->addRow(tr("Behaviour:"), m_cbBehaviour);
+    m_btnSetBehaviour = new QPushButton(tr("Change behaviour"));
+    paramsForm->addRow(m_btnSetBehaviour);
     // set start orient
     m_cbStartDirection = new QComboBox;
     paramsForm->addRow(tr("Start orientation:"), m_cbStartDirection);
@@ -78,13 +81,16 @@ Subwindow::Subwindow(QWidget *parent)
     cmdLayout->addWidget(m_btnSavePix);
     m_btnSaveScreen = new QPushButton(tr("Save screenshot..."));
     cmdLayout->addWidget(m_btnSaveScreen);
+    m_btnInfo = new QPushButton(tr("Info"));
+    cmdLayout->addWidget(m_btnInfo);
 
-    map = new GridWidget(m_engine, 100);
+    QStringList sizeList(QStringList() << "100" << "125" << "150" << "200" << "250");
+    map = new GridWidget(m_engine, sizeList.at(0).toInt());
     topLayout->addWidget(map);
 
     // tune widgets
-    m_cbBehaviour->addItems(m_engine->predefList());
-    m_cbGridSize->addItems(QStringList() << "75" << "100" << "125" << "150" << "200" << "250");
+    //m_cbBehaviour->addItems(m_engine->predefList());
+    m_cbGridSize->addItems(sizeList);
     m_cbStartDirection->addItems(QStringList() << "North" << "East" << "South" << "West");
 
     connect(m_btnStart, &QPushButton::clicked, map, &GridWidget::start);
@@ -97,8 +103,10 @@ Subwindow::Subwindow(QWidget *parent)
     connect(m_cbGridSize, &QComboBox::currentTextChanged, this, &Subwindow::setGridSize);
     connect(m_chbCycledMap, &QCheckBox::checkStateChanged, this, &Subwindow::setCycled);
     connect(m_btnSavePix, &QPushButton::clicked, this, &Subwindow::savePicture);
-    connect(m_cbBehaviour, &QComboBox::currentTextChanged, this, &Subwindow::setBehaviour);
+    //connect(m_cbBehaviour, &QComboBox::currentTextChanged, this, &Subwindow::setBehaviour);
     connect(m_btnSaveScreen, &QPushButton::clicked, this, &Subwindow::saveScreenshot);
+    connect(m_btnSetBehaviour, &QPushButton::clicked, this, &Subwindow::openBehaviourDlg);
+    connect(m_btnInfo, &QPushButton::clicked, this, &Subwindow::showInfo);
 }
 
 void Subwindow::setScore(int score)
@@ -158,10 +166,20 @@ void Subwindow::saveScreenshot()
         QMessageBox::critical(this, tr("Error"), tr("Cannot save file"));   // TODO
 }
 
-void Subwindow::setBehaviour()
+void Subwindow::openBehaviourDlg()
 {
     map->stop();
-    map->reset();
-    QString beh = m_cbBehaviour->currentText();
-    m_engine->setBehaviour(beh);
+    if (m_engine->exec() == QDialog::Accepted) {
+        map->reset();
+        return;
+    }
+    map->start();
+}
+
+void Subwindow::showInfo()
+{
+    auto *win = new InfoWindow(this);
+    //win->setWindowModality(Qt::WindowModal);
+    win->exec();
+    delete win;
 }

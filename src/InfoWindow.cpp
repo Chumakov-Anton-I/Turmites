@@ -1,10 +1,12 @@
 #include "InfoWindow.h"
 
 #include <QBoxLayout>
+#include <QFormLayout>
 #include <QTextBrowser>
+#include <QLabel>
 
 InfoWindow::InfoWindow(QWidget *parent)
-    : QWidget(parent)
+    : QDialog(parent)
 {
     QVBoxLayout *topLayout = new QVBoxLayout;
     QTextBrowser *textMainInfo = new QTextBrowser;
@@ -21,7 +23,9 @@ InfoWindow::InfoWindow(QWidget *parent)
         "<a href=\"https://en.wikipedia.org/wiki/Langton%27s_ant\">Read more...</a>"));
     textMainInfo->setReadOnly(true);
     topLayout->addWidget(textMainInfo);
-    //
+    QFormLayout *linksForm = new QFormLayout;
+    topLayout->addLayout(linksForm);
+    linksForm->addRow(tr("Author"), new QLabel("A. Chumakov"));
     topLayout->addStretch(1);
     setLayout(topLayout);
 }

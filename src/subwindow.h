@@ -29,7 +29,9 @@ private slots:
     void setCycled();
     void savePicture();
     void saveScreenshot();
-    void setBehaviour();
+    //void setBehaviour();
+    void openBehaviourDlg();
+    void showInfo();
 
 private:
     GridWidget *map;
@@ -39,6 +41,8 @@ private:
     QPushButton *m_btnReset;
     QPushButton *m_btnSavePix;
     QPushButton *m_btnSaveScreen;
+    QPushButton *m_btnSetBehaviour;
+    QPushButton *m_btnInfo;
 
     QLineEdit *m_lblScore;
     QSpinBox *m_sbTimeout;

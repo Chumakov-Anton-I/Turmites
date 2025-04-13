@@ -11,20 +11,25 @@ SOURCES += \
     GridWidget.cpp \
     InfoWindow.cpp \
     MainWindow.cpp \
+    #RuleBuilder.cpp \
+    TabAnt.cpp \
     engine.cpp \
     subwindow.cpp \
-    main.cpp \
-    turmitewgt.cpp
+    main.cpp
+    #turmitewgt.cpp
 
 HEADERS += \
     CAnt.h \
     GridWidget.h \
     InfoWindow.h \
     MainWindow.h \
+    #RuleBuilder.h \
+    RuleValidator.h \
     SquareCell.h \
+    TabAnt.h \
     engine.h \
-    subwindow.h \
-    turmitewgt.h
+    subwindow.h
+    #turmitewgt.h
 
 msvc:{
     QMAKE_CXXFLAGS_RELEASE += /O2

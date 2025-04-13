@@ -5,9 +5,9 @@
 #ifndef INFOWINDOW_H
 #define INFOWINDOW_H
 
-#include <QWidget>
+#include <QDialog>
 
-class InfoWindow : public QWidget
+class InfoWindow : public QDialog
 {
     Q_OBJECT
 public:

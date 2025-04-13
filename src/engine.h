@@ -1,9 +1,14 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#include <QDialog>
 #include <QStringList>
 #include <QHash>
 #include <QColor>
+
+class QPushButton;
+class QTabWidget;
+class TabAnt;
 
 struct TState
 {
@@ -12,28 +17,35 @@ struct TState
     unsigned nState;    // new state
 };
 
-class Engine
+class Engine : public QDialog
 {
+    Q_OBJECT
 public:
     enum Direction { North, East, South, West };
     enum Turn { Left, Front, Right, Uturn };
 
-    Engine();
-    //~Engine() {}
+    explicit Engine(QWidget *parent = nullptr);
 
-    void setBehaviour(const QString &behaviour);
+    //! Generates the table of states
+    //! \param behaviour
     void setBehaviour(const QStringList &behaviour);
-    void setBehaviourByName(const QString &name);
+
     void move(QColor &color, int &direction);
-    void reset();
+    void reset() { m_cState = 0; }
+    void accept();
 
-    QStringList predefList() const { return m_defModels; }  // not very good
-    QStringList predefListT() const { return QStringList(m_predefTurmites.keys()); }  // not very good too
+private:
+    void initModels();
 
-protected:
-    QStringList m_defModels;
+    QTabWidget *m_tabs;
+    TabAnt *m_tabAnt;
+    //TabTurmite *m_tabTurmite;
+
+    QPushButton *m_btnAddState;
+    QPushButton *m_btnAddColor;
+
     QList<QColor> m_colors;
-    QHash<QString, TState> m_stateTable;
+    QHash<QString, TState> m_stateTable;    // table of states of transfers
     unsigned m_cState;  // current state
     QColor m_background;    // default color
     QHash<QString, QStringList> m_predefTurmites;
