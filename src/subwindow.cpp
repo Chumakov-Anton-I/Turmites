@@ -58,7 +58,7 @@ Subwindow::Subwindow(QWidget *parent)
     m_sbTimeout->setSuffix(tr(" ms"));
     paramsForm->addRow(tr("Timeout:"), m_sbTimeout);
     m_sbStepsToUpd = new QSpinBox;
-    m_sbStepsToUpd->setRange(1, 500);
+    m_sbStepsToUpd->setRange(1, 1000);
     m_sbStepsToUpd->setValue(1);
     paramsForm->addRow(tr("Steps to update:"), m_sbStepsToUpd);
     // set behaviour

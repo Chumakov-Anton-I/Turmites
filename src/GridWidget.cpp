@@ -103,27 +103,28 @@ void GridWidget::initMap()
 
 void GridWidget::updateMap()
 {
-    if (!m_timer->isActive() || !m_ant->move()) {
-        m_timer->stop();    // stop the timer after ant's death
-        return;
+    if (!m_timer->isActive()) return;
+    int i = m_stepsToUpdate;
+    m_painter->begin(m_pixmap);
+    while (i > 0) {
+        if (!m_ant->move()) {
+            m_timer->stop();    // stop the timer after ant's death
+            break;
+        }
+        m_painter->fillRect(getRect(m_ant->changedCell()->pos()), m_ant->changedCell()->color());
+        --i;
+        m_score++;
     }
-    m_score++;
+    m_painter->end();
     emit scoreChanged(m_score);
 }
 
 void GridWidget::paintEvent(QPaintEvent *)
 {
-    int i = m_stepsToUpdate;
-    while (i > 0) {
-        updateMap();
-
-        m_painter->begin(m_pixmap);
-        m_painter->fillRect(getRect(m_ant->changedCell()->pos()), m_ant->changedCell()->color());
-        m_painter->fillRect(getRect(m_ant->pos()), m_ant->color());
-        m_painter->end();
-        --i;
-    }
-
+    updateMap();
+    m_painter->begin(m_pixmap);
+    m_painter->fillRect(getRect(m_ant->pos()), m_ant->color());
+    m_painter->end();
     m_painter->begin(this);
     m_painter->drawPixmap(m_pixmap->rect(), *m_pixmap);
     m_painter->end();
