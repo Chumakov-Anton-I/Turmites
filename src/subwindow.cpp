@@ -62,10 +62,8 @@ Subwindow::Subwindow(QWidget *parent)
     m_sbStepsToUpd->setValue(1);
     paramsForm->addRow(tr("Steps to update:"), m_sbStepsToUpd);
     // set behaviour
-    //m_cbBehaviour = new QComboBox;
-    //paramsForm->addRow(tr("Behaviour:"), m_cbBehaviour);
     m_btnSetBehaviour = new QPushButton(tr("Change behaviour"));
-    paramsForm->addRow(m_btnSetBehaviour);
+    paramsForm->addRow(tr("Behaviour:"), m_btnSetBehaviour);
     // set start orient
     m_cbStartDirection = new QComboBox;
     paramsForm->addRow(tr("Start orientation:"), m_cbStartDirection);
@@ -89,7 +87,6 @@ Subwindow::Subwindow(QWidget *parent)
     topLayout->addWidget(map);
 
     // tune widgets
-    //m_cbBehaviour->addItems(m_engine->predefList());
     m_cbGridSize->addItems(sizeList);
     m_cbStartDirection->addItems(QStringList() << "North" << "East" << "South" << "West");
 
@@ -103,10 +100,10 @@ Subwindow::Subwindow(QWidget *parent)
     connect(m_cbGridSize, &QComboBox::currentTextChanged, this, &Subwindow::setGridSize);
     connect(m_chbCycledMap, &QCheckBox::checkStateChanged, this, &Subwindow::setCycled);
     connect(m_btnSavePix, &QPushButton::clicked, this, &Subwindow::savePicture);
-    //connect(m_cbBehaviour, &QComboBox::currentTextChanged, this, &Subwindow::setBehaviour);
     connect(m_btnSaveScreen, &QPushButton::clicked, this, &Subwindow::saveScreenshot);
     connect(m_btnSetBehaviour, &QPushButton::clicked, this, &Subwindow::openBehaviourDlg);
     connect(m_btnInfo, &QPushButton::clicked, this, &Subwindow::showInfo);
+    connect(m_engine, &Engine::behaviourChanged, m_btnSetBehaviour, &QPushButton::setText);
 }
 
 void Subwindow::setScore(int score)

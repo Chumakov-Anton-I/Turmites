@@ -8,7 +8,9 @@
 InfoWindow::InfoWindow(QWidget *parent)
     : QDialog(parent)
 {
+    setWindowTitle(tr("Info"));
     QVBoxLayout *topLayout = new QVBoxLayout;
+    topLayout->setAlignment(Qt::AlignHCenter);
     QTextBrowser *textMainInfo = new QTextBrowser;
     textMainInfo->setOpenExternalLinks(true);
     textMainInfo->setFrameShape(QFrame::NoFrame);
@@ -26,6 +28,7 @@ InfoWindow::InfoWindow(QWidget *parent)
     QFormLayout *linksForm = new QFormLayout;
     topLayout->addLayout(linksForm);
     linksForm->addRow(tr("Author"), new QLabel("A. Chumakov"));
+    linksForm->addRow(tr("Link"), new QLabel("<a href=\"https://github.com/Chumakov-Anton-I/Turmites\">https://github.com/Chumakov-Anton-I/Turmites</a>"));
     topLayout->addStretch(1);
     setLayout(topLayout);
 }

@@ -118,10 +118,6 @@ void GridWidget::paintEvent(QPaintEvent *)
         updateMap();
 
         m_painter->begin(m_pixmap);
-        /*for (auto r = m_map.constBegin(); r != m_map.constEnd(); ++r) {
-            for (auto c = r->constBegin(); c != r->constEnd(); ++c)
-                m_painter->fillRect(getRect((*c)->pos()), (*c)->color());
-        }*/
         m_painter->fillRect(getRect(m_ant->changedCell()->pos()), m_ant->changedCell()->color());
         m_painter->fillRect(getRect(m_ant->pos()), m_ant->color());
         m_painter->end();

@@ -29,7 +29,6 @@ private slots:
     void setCycled();
     void savePicture();
     void saveScreenshot();
-    //void setBehaviour();
     void openBehaviourDlg();
     void showInfo();
 
@@ -50,7 +49,6 @@ private:
     QComboBox *m_cbGridSize;
     QCheckBox *m_chbCycledMap;
     QComboBox *m_cbStartDirection;
-    QComboBox *m_cbBehaviour;
 };
 
 #endif // SUBWINDOW_H

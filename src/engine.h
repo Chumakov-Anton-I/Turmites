@@ -39,6 +39,9 @@ public slots:
     void loadAnt(QListWidgetItem *item);
     void loadTurmite(QListWidgetItem *item);
 
+signals:
+    void behaviourChanged(const QString &name);
+
 private:
     void initModels();
 
@@ -47,9 +50,6 @@ private:
     QPushButton *m_btnEditItem;
     QListWidget *m_listAnts;
     QListWidget *m_listTurmites;
-
-    //TabAnt *m_tabAnt;
-    //TabTurmite *m_tabTurmite;
 
     QList<QColor> m_colors;
     QHash<QString, TState> m_stateTable;    // table of states of transfers
