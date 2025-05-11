@@ -12,7 +12,7 @@
 #include <QTimer>
 
 GridWidget::GridWidget(Engine *engine, int size, QWidget *parent)
-    : QWidget(parent), m_mapSize(size), m_timeout(10), m_startDir(CAnt::North)
+    : QWidget(parent), m_engine(engine), m_mapSize(size), m_timeout(10), m_startDir(CAnt::North)
 {
     initMap();
 
@@ -23,6 +23,8 @@ GridWidget::GridWidget(Engine *engine, int size, QWidget *parent)
     m_painter = new QPainter;
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, QOverload<>::of(&GridWidget::update));
+
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
 GridWidget::~GridWidget()
@@ -83,11 +85,12 @@ void GridWidget::setCycled(bool on)
 void GridWidget::initMap()
 {
     /* Fill grid */
+    QColor bg = m_engine->background();
     m_map.clear();
     for (int i = 0; i < m_mapSize; ++i) {
         QVector<SquareCell *> row;
         for (int j = 0; j < m_mapSize; ++j)
-            row.push_back(new SquareCell(i, j, Qt::white));
+            row.push_back(new SquareCell(i, j, bg));
         m_map.push_back(row);
     }
 
@@ -95,7 +98,7 @@ void GridWidget::initMap()
     resize(m_mapSize*m_cellSize, m_mapSize*m_cellSize);
     setMinimumSize(size());
     m_pixmap = new QPixmap(size());
-    m_pixmap->fill(Qt::white);
+    m_pixmap->fill(bg);
 
     m_score = 0;    // reset score
     emit scoreChanged(0);

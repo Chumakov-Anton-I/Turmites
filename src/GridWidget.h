@@ -50,6 +50,7 @@ private:
 
     SquaredMap m_map;
     CAnt *m_ant;
+    Engine *m_engine;
     QPainter *m_painter;
     QPixmap *m_pixmap;
     QTimer *m_timer;

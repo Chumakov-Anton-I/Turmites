@@ -21,6 +21,7 @@ class Subwindow : public QWidget
     Q_OBJECT
 public:
     explicit Subwindow(QWidget *parent = nullptr);
+    ~Subwindow() {}
 
 private slots:
     void setScore(int score);

@@ -35,7 +35,6 @@ Engine::Engine(QWidget *parent)
     connect(m_listTurmites, &QListWidget::itemDoubleClicked, this, &Engine::loadTurmite);
 
     initModels();
-    setBehaviour(QStringList() << "0|#000000:#ffffff:0:0" << "0|#ffffff:#000000:2:0"); // init defaul model - Langton's ant
 }
 
 void Engine::setBehaviour(const QStringList &behaviour)
@@ -71,6 +70,7 @@ void Engine::move(QColor &color, int &direction)
 
 void Engine::loadAnt(QListWidgetItem *item)
 {
+    m_background = Qt::white;
     auto name = item->text();
     emit behaviourChanged(name);
     if (name == "LR") { // default model - Langton's ant
@@ -102,6 +102,7 @@ void Engine::loadAnt(QListWidgetItem *item)
 
 void Engine::loadTurmite(QListWidgetItem *item)
 {
+    m_background = Qt::black;
     auto data = item->data(Qt::UserRole).toStringList();
     setBehaviour(data);
     emit behaviourChanged(item->text());
@@ -135,39 +136,71 @@ void Engine::initModels()
     auto *item = new QListWidgetItem("Langton's ant");
     item->setData(Qt::UserRole, QStringList() << "0|#000000:#ffffff:0:0" << "0|#ffffff:#000000:2:0");
     m_listTurmites->addItem(item);
+    // 'Demo'
     item = new QListWidgetItem("Demo");
     item->setData(Qt::UserRole, QStringList()
                         << QString("0|#000000:#ffffff:2:0") << QString("0|#ffffff:#ffffff:2:1")
                         << QString("1|#000000:#000000:1:0") << QString("1|#ffffff:#000000:1:1"));
     m_listTurmites->addItem(item);
+    // 'Highway'
     item = new QListWidgetItem("Highway");
     item->setData(Qt::UserRole, QStringList()
                         << "0|#000000:#ffffff:2:1" << "0|#ffffff:#000000:2:1"
                         << "1|#000000:#ffffff:1:0" << "1|#ffffff:#ffffff:1:1");
     m_listTurmites->addItem(item);
+    // 'Wormtrail'
     item = new QListWidgetItem("Wormtrail");
     item->setData(Qt::UserRole, QStringList()
                         << "0|#000000:#ffffff:2:1" << "0|#ffffff:#ffffff:0:1"
                         << "1|#000000:#ffffff:2:1" << "1|#ffffff:#000000:2:0");
     m_listTurmites->addItem(item);
+    // 'Picasso'
     item = new QListWidgetItem("Picasso");
     item->setData(Qt::UserRole, QStringList()
                         << "0|#000000:#ffffff:0:0" << "0|#ffffff:#ffffff:2:1"
                         << "1|#000000:#000000:2:0" << "1|#ffffff:#000000:0:1");
     m_listTurmites->addItem(item);
-    item = new QListWidgetItem("Fibonacci");
+    // 'Fibonacci spiral'
+    item = new QListWidgetItem("Fibonacci spiral");
     item->setData(Qt::UserRole, QStringList()
         << QString("0|%1:%2:0:1").arg(c0, c1) << QString("0|%1:%2:0:1").arg(c1, c1)
         << QString("1|%1:%2:2:1").arg(c0, c1) << QString("1|%1:%2:1:0").arg(c1, c0));
     m_listTurmites->addItem(item);
+    // 'Diamond'
     item = new QListWidgetItem("Diamond");
     item->setData(Qt::UserRole, QStringList()
                     << "0|#000000:#000000:1:1" << "0|#ffffff:#000000:2:1"
                     << "1|#000000:#ffffff:0:0" << "1|#ffffff:#000000:1:1");
     m_listTurmites->addItem(item);
+    // 'Snowflake'
     item = new QListWidgetItem("Snowflake");
     item->setData(Qt::UserRole, QStringList()
                     << "0|#000000:#ffffff:0:1" << "0|#ffffff:#ffffff:2:0"
                     << "1|#000000:#ffffff:3:1" << "1|#ffffff:#ffffff:3:2"
                     << "2|#000000:#000000:0:0" << "2|#ffffff:#000000:3:0");
+    m_listTurmites->addItem(item);
+    // 'Spiral'
+    item = new QListWidgetItem("Spiral");
+    item->setData(Qt::UserRole, QStringList()
+        << QString("0|%1:%2:1:1").arg(c0, c1) << QString("0|%1:%2:0:0").arg(c1, c1)
+        << QString("1|%1:%2:2:1").arg(c0, c1) << QString("1|%1:%2:1:0").arg(c1, c0));
+    m_listTurmites->addItem(item);
+    // 'Demo 2'
+    item = new QListWidgetItem("Highway 2");
+    item->setData(Qt::UserRole, QStringList()
+        << QString("0|%1:%2:2:0").arg(c0, c1) << QString("0|%1:%2:0:1").arg(c1, c0)
+        << QString("1|%1:%2:0:0").arg(c0, c1) << QString("1|%1:%2:0:1").arg(c1, c0));
+    m_listTurmites->addItem(item);
+    // '
+    item = new QListWidgetItem("Highway 3");
+    item->setData(Qt::UserRole, QStringList()
+        << QString("0|%1:%2:2:0").arg(c0, c1) << QString("0|%1:%2:0:1").arg(c1, c0)
+        << QString("1|%1:%2:1:0").arg(c0, c1) << QString("1|%1:%2:1:1").arg(c1, c0));
+    m_listTurmites->addItem(item);
+    // 'Needle'
+    item = new QListWidgetItem("Needle");
+    item->setData(Qt::UserRole, QStringList()
+        << "0|#000000:#ffffff:1:1" << "0|#ffffff:#8b0000:1:0" << "0|#8b0000:#000000:0:1"
+        << "1|#000000:#ffffff:2:0" << "1|#ffffff:#8b0000:2:1" << "1|#8b0000:#ffffff:2:1");
+    m_listTurmites->addItem(item);
 }

@@ -5,6 +5,7 @@
 
 #include <QBoxLayout>
 #include <QFormLayout>
+#include <QGridLayout>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QLineEdit>
@@ -13,43 +14,51 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QRect>
+#include <QLabel>
+#include <QGroupBox>
 
 Subwindow::Subwindow(QWidget *parent)
     : QWidget(parent)
 {
-    m_engine = new Engine;
+    m_engine = new Engine(this);
+    m_engine->setBehaviour(QStringList() << "0|#000000:#ffffff:0:0" << "0|#ffffff:#000000:2:0");    // default behaviour - Langton's ant
 
-    setBackgroundRole(QPalette::Window);
-    setAutoFillBackground(true);
-
-    QHBoxLayout *topLayout = new QHBoxLayout;
-    topLayout->setContentsMargins(1, 1, 1, 1);
+    auto *topLayout = new QHBoxLayout;
+    topLayout->setContentsMargins(2, 2, 2, 2);
+    topLayout->setSpacing(2);
     setLayout(topLayout);
-
-    QVBoxLayout *cmdLayout = new QVBoxLayout;
-    cmdLayout->setContentsMargins(1, 1, 1, 1);
+    // left pane
+    auto *cmdLayout = new QVBoxLayout;
+    cmdLayout->setSpacing(3);
+    //cmdLayout->setContentsMargins(2, 2, 2, 2);
     topLayout->addLayout(cmdLayout);
 
+    auto *btnsGrid = new QGridLayout;
+    btnsGrid->setSpacing(2);
+    cmdLayout->addLayout(btnsGrid);
     m_btnStart = new QPushButton(tr("Start"));
     m_btnStop = new QPushButton(tr("Stop"));
     m_btnReset = new QPushButton(tr("Reset"));
+    btnsGrid->addWidget(m_btnStart, 0, 0);
+    btnsGrid->addWidget(m_btnStop, 0, 1);
+    btnsGrid->addWidget(m_btnReset, 0, 2);
 
-    cmdLayout->addWidget(m_btnStart);
-    cmdLayout->addWidget(m_btnStop);
-    cmdLayout->addWidget(m_btnReset);
+    m_lblScore = new QLineEdit("0");
+    m_lblScore->setReadOnly(true);
+    btnsGrid->addWidget(new QLabel(tr("Score")), 1, 0);
+    btnsGrid->addWidget(m_lblScore, 1, 1, 1, 2);
 
-    QFormLayout *paramsForm = new QFormLayout;
-    paramsForm->setContentsMargins(1, 1, 1, 1);
+    auto *settingsGroup = new QGroupBox(tr("Settings"));
+    cmdLayout->addWidget(settingsGroup);
+
+    auto *paramsForm = new QFormLayout;
+    //paramsForm->setContentsMargins(1, 1, 1, 1);
     paramsForm->setRowWrapPolicy(QFormLayout::DontWrapRows);
     paramsForm->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
     paramsForm->setFormAlignment(Qt::AlignLeft | Qt::AlignTop);
     paramsForm->setLabelAlignment(Qt::AlignRight);
-    cmdLayout->addLayout(paramsForm);
+    settingsGroup->setLayout(paramsForm);
 
-    // score counter
-    m_lblScore = new QLineEdit("0");
-    m_lblScore->setReadOnly(true);
-    paramsForm->addRow(tr("Steps:"), m_lblScore);
     // set timeout
     m_sbTimeout = new QSpinBox;
     m_sbTimeout->setRange(1, 1000);
@@ -77,7 +86,7 @@ Subwindow::Subwindow(QWidget *parent)
     cmdLayout->addStretch(1);
     m_btnSavePix = new QPushButton(tr("Save picture..."));
     cmdLayout->addWidget(m_btnSavePix);
-    m_btnSaveScreen = new QPushButton(tr("Save screenshot..."));
+    m_btnSaveScreen = new QPushButton(tr("Take screenshot..."));
     cmdLayout->addWidget(m_btnSaveScreen);
     m_btnInfo = new QPushButton(tr("Info"));
     cmdLayout->addWidget(m_btnInfo);
@@ -104,6 +113,8 @@ Subwindow::Subwindow(QWidget *parent)
     connect(m_btnSetBehaviour, &QPushButton::clicked, this, &Subwindow::openBehaviourDlg);
     connect(m_btnInfo, &QPushButton::clicked, this, &Subwindow::showInfo);
     connect(m_engine, &Engine::behaviourChanged, m_btnSetBehaviour, &QPushButton::setText);
+
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 }
 
 void Subwindow::setScore(int score)
@@ -116,7 +127,7 @@ void Subwindow::setGridSize()
     int size = m_cbGridSize->currentText().toInt();
     if (size == 0) size = 100;
     map->setSize(size);
-    resize(minimumSizeHint());
+    //resize(minimumSizeHint());
 }
 
 void Subwindow::setStartDirection()
@@ -170,7 +181,6 @@ void Subwindow::openBehaviourDlg()
         map->reset();
         return;
     }
-    map->start();
 }
 
 void Subwindow::showInfo()

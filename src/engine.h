@@ -10,7 +10,6 @@ class QPushButton;
 class QTabWidget;
 class QListWidget;
 class QListWidgetItem;
-//class TabAnt;
 
 struct TState
 {
@@ -34,6 +33,8 @@ public:
 
     void move(QColor &color, int &direction);
     void reset() { m_cState = 0; }
+
+    QColor background() const { return m_background; }
 
 public slots:
     void loadAnt(QListWidgetItem *item);
